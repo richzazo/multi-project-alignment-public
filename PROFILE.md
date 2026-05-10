@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 9, 2026 (v1.4 — added auto-fetch alignment doc for CS/PI, cache-busting note, handoff prep command).
+Last updated: May 9, 2026 (v1.5 — documented alignment doc trigger phrases).
 
 ---
 
@@ -191,6 +191,12 @@ When Richard says any of these in any project chat, fetch the doc and re-anchor:
 Every project session should pull the doc once at start. Silent if no changes since last fetch. One-line note if updated.
 
 **Capex Scout and Portfolio Intelligence chats** also auto-fetch the CS↔PI alignment doc on session start (`https://raw.githubusercontent.com/richzazo/capex-core-alignment-public/main/ALIGNMENT.md`). Z Sales chats only fetch this profile doc; the CS↔PI alignment doc is not relevant to that project.
+
+**Trigger phrases for the alignment doc** (CS and PI chats only):
+- `sync pi<>capex`
+- `align pi-cap`
+- `sync from alignment doc`
+- `re-read alignment`
 
 **Cache-busting.** GitHub's raw CDN can lag 5+ minutes between a push and the doc serving the new content. If a fetched doc shows an unexpectedly old version, append `?v=<random>` to the URL to bypass cache, or wait a few minutes and re-fetch.
 
