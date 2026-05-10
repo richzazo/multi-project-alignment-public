@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 9, 2026 (v1.1 — incorporates initial popup review).
+Last updated: May 9, 2026 (v1.3 — added explicit-prefix rule for prose recommendations).
 
 ---
 
@@ -70,6 +70,7 @@ Last updated: May 9, 2026 (v1.1 — incorporates initial popup review).
 - **Tap-to-preview pattern.** When option text is too long for the popup, the operator may tap to expand/preview. Tapping should reveal full text first; submission requires a separate confirmation tap. (Note: this is a Claude UI behavior request — work around in the meantime by keeping option labels short.)
 - **Followed by space for him to "blend and add my flare and thoughts"** — popup answer is the seed; his free-text response refines it.
 - **Never overwhelming.** Don't pile critical-thinking decisions back-to-back. Pace.
+- **When making a recommendation in the prose above a popup, name the option by its prefix explicitly** (e.g., "I'm leaning C" not "I'm leaning toward the third one"). The operator references prefixes when responding; the prose should match.
 
 ### Resuming work on a project
 When he opens a project chat after a break, he wants:
@@ -214,32 +215,39 @@ Bump the version line at the top of `PROFILE.md` whenever a section materially c
 
 Updated by Richard or any project Claude when something material changes. Goal: any other project's Claude can read this and instantly know what's safe to suggest vs what would conflict.
 
+**Field guide.** Kept fields are deliberately resistant to stale-out:
+- **Account** — which Claude account owns this project
+- **Last active** — rough date, low-precision is fine
+- **Phase** — `early-build` / `mid-build` / `polishing` / `production`. Updated only on phase transitions, not per-feature shipments.
+- **Mac required for** — high-level dev environment notes
+- **Mobile-friendly tasks** — what's safe to suggest from a phone session
+- **Cross-project blockers** — anything actively blocking another project (rare)
+
+Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT tracked here — they go stale within hours and don't drive coordination decisions.
+
 ### Capex Scout
 - **Account:** personal
-- **Last active:** May 9, 2026 (SQLite persistence shipped, CS↔PI alignment doc set up)
-- **Currently:** mid-build, ready for next dev session (Finnhub wiring or theme ontology)
+- **Last active:** May 9, 2026
+- **Phase:** mid-build (real LLM, real EDGAR data, persistence shipped; Finnhub + theme ontology + provenance UI ahead)
 - **Mac required for:** Claude Code dev work (uv-based Python project at `~/Desktop/capex-scout`)
 - **Mobile-friendly tasks:** product design, theme/ontology decisions, prototype review, brief drafting
-- **Latest commit:** TBD (capex-scout repo not yet under git)
-- **Recent API spend:** ~$0.05/run mock, ~$0.15/run live
+- **Cross-project blockers:** none
 
 ### Portfolio Intelligence
 - **Account:** personal 2
-- **Last active:** May 9, 2026 (received CS↔PI alignment doc, locked verdict canonical and signal_id decisions)
-- **Currently:** v16 React mockup iteration, design-heavy
-- **Mac required for:** none yet (still hardcoded mock data; backend extraction is v2.0)
+- **Last active:** May 9, 2026
+- **Phase:** mid-build (React mockup heavy iteration; backend extraction is v2.0)
+- **Mac required for:** none yet (still hardcoded mock data)
 - **Mobile-friendly tasks:** all current work — design, mockup review, decision capture
-- **Latest commit:** TBD
-- **Recent API spend:** mostly chat, no API calls yet
+- **Cross-project blockers:** none
 
 ### Z Sales Platform
 - **Account:** work
 - **Last active:** TBD
-- **Currently:** needs heavy dev cycles, push toward production
+- **Phase:** TBD (intent: push toward production)
 - **Mac required for:** dev work (specifics TBD when project is documented)
 - **Mobile-friendly tasks:** TBD
-- **Latest commit:** TBD
-- **Recent API spend:** TBD
+- **Cross-project blockers:** none
 
 ---
 
