@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 9, 2026 (v1.5 — documented alignment doc trigger phrases).
+Last updated: May 10, 2026 (v1.6 — populated Z Sales context line).
 
 ---
 
@@ -30,6 +30,7 @@ Last updated: May 9, 2026 (v1.5 — documented alignment doc trigger phrases).
 - **Links go as tappable links** (`[label](url)`), not in code blocks.
 - **Label clearly:** what's manual (he does it) vs what Claude Code does. Use "you (manual)" / "paste into Claude Code" markers.
 - **Don't pair dense messages with the popup question selector** — popup blocks the read on mobile. Either keep the message tight before the picker, or ask in plain text.
+- **No comments in pasted bash blocks.** Richard's zsh does not have `INTERACTIVE_COMMENTS` enabled, so `#` lines fail with `command not found: #`. Strip explanatory comments from any block intended for direct paste; explanation goes in prose around the block.
 
 ### His tendencies (so Claude can anticipate, not just react)
 - **Multitasks across 2-3 projects per session, often mid-thought.** Context switches without warning.
@@ -42,6 +43,7 @@ Last updated: May 9, 2026 (v1.5 — documented alignment doc trigger phrases).
 - **Vocabulary discipline matters.** Try to align on his words and stay consistent. Don't drift to synonyms casually. When introducing a new term, explain it briefly and use it consistently going forward.
 - **Brain-dumps with maximum detail** so capture is rich enough for first-version completeness. Take the dump, structure it, return the structured version for him to refine.
 - **Build-philosophy: build the heavy/foundational stuff right the first time** — no shortcuts that compound into tech debt. **Iterate fast on product/UX work** — that's where speed pays. Always shipping toward live, value-adding production, not lab demos.
+- **KISS over ceremony.** When he says "keep it simple," strip the deliverable to the one or two things he asked for. No bonus artifacts, no multi-step what-to-do-next lists, no preamble. Procedure expansions (Section 5b style) are fine when explicitly invoked, otherwise default to minimum-viable-response.
 
 ### How he likes work to be done
 - **Visual learner.** HTML mockups, prototypes, and rendered visuals help him give better feedback. Whenever a feature can be demoed visually, demo it.
@@ -58,6 +60,17 @@ Last updated: May 9, 2026 (v1.5 — documented alignment doc trigger phrases).
 - **Easy on phone:** PDF, Word, plain text downloads work cleanly.
 - **Hard on phone:** `.md`, `.jsx`, `.html`, and other dev file types — operator may not have a smooth way to open or save them. When delivering to a mobile session, prefer PDF/Word for documents, and for code/markup files, either render the contents inline as readable text or push to GitHub so they can be viewed in a browser.
 - **Doc handoff pattern.** Operator prefers: Claude sends the doc → he downloads it → Claude sends a copy-paste-ready terminal script (in a code block) that finds the doc in `~/Downloads`, moves it to the right place, unzips/extracts if needed, and verifies. Reduces operator decision-making to "tap download, paste script."
+
+### File and version naming conventions
+
+Consistent across all projects. New in v1.6.
+
+- **Handoff docs:** `<Project>_Handoff_<YYYY-MM-DD>.md`. Examples: `ZSales_Handoff_2026-05-10.md`, `CapexScout_Handoff_2026-05-09.md`, `PortfolioIntelligence_Handoff_2026-05-09.md`. No spaces, no dashes inside the project name, ISO date.
+- **Project knowledge folder for superseded handoff docs:** `/history/` inside project knowledge. Old addendums and prior handoff versions move here when a new consolidated doc lands. They stop being read as live context.
+- **Profile doc version line:** `Last updated: <Month Day, Year> (v<X.Y> — <one-line change summary>).` Bump minor for section updates, major for rewrites.
+- **Per-project alignment docs:** `ALIGNMENT.md` in the project's public alignment repo. Example: `capex-core-alignment-public/ALIGNMENT.md`.
+- **Z Sales JSX files in project knowledge:** keep `z-sales-platform.jsx` (v0.1 diagnostic) and `z-sales-platform-demo.jsx` (v0.2 editorial demo) named as-is. They are referenced by the handoff doc as historical evidence and live UI seed respectively. Renaming would break the handoff doc references.
+- **Commit messages on alignment/profile pushes:** `v<X.Y>: <one-line change summary>`. Example: `v1.6: populate Z Sales context line`.
 
 ### Format he likes for question batches
 
@@ -123,6 +136,7 @@ Mac runs **one Claude account at a time** for Claude Code dev work. Switching ac
 - **Shared workflow vocabulary glossary** — handoff, sync, recap, brief, prompt, alignment, profile, etc. Workflow words should mean the same thing across all projects. Domain words (themes, signals, baskets, positions, deals, leads) stay project-local and ARE NOT shared in this glossary.
 - **Handoff timing** — when migrating heavy dev work to a different account/Mac, projects should help each other prep clean handoff docs
 - **Visual asset surfacing** — latest HTML/mockups/PDFs across projects should be easy to re-surface
+- **File and version naming conventions** — Section 1 names the patterns; all projects follow them.
 
 ### What projects SHOULD NOT coordinate on (substance/data level)
 
@@ -225,7 +239,7 @@ Bump the version line at the top of `PROFILE.md` whenever a section materially c
 
 When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wrap up"), the project chat immediately produces a complete handoff package for that project, in this order:
 
-1. **Comprehensive handoff doc** — full state-of-project markdown covering: what is, where it is now (shipped, validated, known issues, in-flight), canonical reference URLs, file layout, how-to-run, locked architectural decisions, open questions, what to do first in the next chat, what NOT to do, the first-message prompt for the new chat. Format mirrors the working `CapexScout_Handoff_<date>.md` template.
+1. **Comprehensive handoff doc** — full state-of-project markdown covering: what is, where it is now (shipped, validated, known issues, in-flight), canonical reference URLs, file layout, how-to-run, locked architectural decisions, open questions, what to do first in the next chat, what NOT to do, the first-message prompt for the new chat. Format mirrors the working `<Project>_Handoff_<YYYY-MM-DD>.md` naming convention (Section 1).
 
 2. **Project Instructions update** — a copy-paste-ready block for the project's settings → Instructions field, reflecting the current state (handoff doc reference, sync URLs, trigger phrases, working-style highlights).
 
@@ -233,7 +247,7 @@ When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wra
 
 4. **Alignment doc updates if needed** — for CS or PI chats only: if anything from this session affects the cross-product substrate (new locked decision, schema change, vocabulary change), Claude proposes the alignment doc update before pushing.
 
-5. **Download + push terminal scripts** — copy-paste-ready bash scripts for moving the doc from `~/Downloads` into the right repo folder, then `git add / commit / push` to GitHub.
+5. **Download + push terminal scripts** — copy-paste-ready bash scripts for moving the doc from `~/Downloads` into the right repo folder, then `git add / commit / push` to GitHub. **No inline comments in pasteable bash blocks** (Section 1 communication rule); explanation goes in prose around the block.
 
 The chat does all of this without further prompting after the trigger phrase. Only pauses for confirmation on profile or alignment doc changes (since those affect other projects).
 
@@ -271,10 +285,10 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 
 ### Z Sales Platform
 - **Account:** work
-- **Last active:** TBD
-- **Phase:** TBD (intent: push toward production)
-- **Mac required for:** dev work (specifics TBD when project is documented)
-- **Mobile-friendly tasks:** TBD
+- **Last active:** May 10, 2026
+- **Phase:** mid-build (v0.2 multi-agent orchestrator shipped; local dev environment standing up; OAuth wiring + UI live-data wiring next)
+- **Mac required for:** Claude Code dev work on Next.js 15 / pnpm project, currently `~/Downloads/z-sales-platform/`, relocating to `~/Code/z-sales-platform/`
+- **Mobile-friendly tasks:** handoff doc review, deal-card schema review, decision capture, prompt drafting for Mac sessions, voice calibration on email drafts
 - **Cross-project blockers:** none
 
 ---
@@ -284,7 +298,7 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 Tracked here so no project Claude invents answers:
 
 - **Cross-account dev workflow.** Is there a smooth pattern for migrating a project temporarily to a different account when one account is compute-bound? (Move handoff doc + repo access?) — currently asynchronous and manual.
-- **Z Sales Platform onboarding.** Needs a project-level alignment doc and GitHub repo similar to CS and PI when Richard has bandwidth.
+- **Z Sales Platform alignment doc.** Currently uses only this profile + project knowledge. May graduate to a project-level `ALIGNMENT.md` if multi-user (Lucas) onboarding makes shared substrate decisions worth tracking publicly.
 - **MCP server for sync.** Possible future upgrade where each project's Claude calls an MCP tool to fetch fresh doc state instead of relying on web_fetch.
 - **Daily digest.** Should a single chat or automated process produce a once-a-day digest summarizing all 3 projects' state, what changed, what needs attention next? Format and trigger TBD.
 - **Command center pattern.** Whether to graduate to a dedicated "command center" chat that pulls fresh state from all 3 projects on demand and gives the meta-view ("what's running, what's stale, what's mobile-friendly right now, what needs you next"). Currently using the per-project-chat-with-cross-awareness pattern (Option B); revisit if cross-project nudges (Section 3 #4) prove insufficient in practice.
@@ -303,6 +317,8 @@ COMMUNICATION
 - Code blocks for pasteable text only; links as tappable
 - 2-4 mutually exclusive options on decisions
 - Vocabulary discipline: align on his words, stay consistent
+- KISS over ceremony when he asks for simple
+- No comments inside pasted bash blocks (his zsh fails on #)
 
 EXECUTION
 - Step-by-step instructions when doing
@@ -328,6 +344,12 @@ POPUP QUESTIONS
 - Multi-select: A/B/C/D prefixes
 - Single-select: keep option text fully readable in popup
 - Long options: restate in plain text below popup
+- Recommend by prefix in prose ("I'm leaning C")
+
+NAMING
+- Handoff docs: <Project>_Handoff_<YYYY-MM-DD>.md
+- Profile version line: v<X.Y> with one-line change summary
+- Commit messages on profile/alignment: v<X.Y>: <change summary>
 
 COORDINATION
 - Workflow alignment yes; data/code coordination no
