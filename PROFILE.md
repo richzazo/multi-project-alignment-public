@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 9, 2026 (v1.3 — added explicit-prefix rule for prose recommendations).
+Last updated: May 9, 2026 (v1.4 — added auto-fetch alignment doc for CS/PI, cache-busting note, handoff prep command).
 
 ---
 
@@ -190,6 +190,10 @@ When Richard says any of these in any project chat, fetch the doc and re-anchor:
 
 Every project session should pull the doc once at start. Silent if no changes since last fetch. One-line note if updated.
 
+**Capex Scout and Portfolio Intelligence chats** also auto-fetch the CS↔PI alignment doc on session start (`https://raw.githubusercontent.com/richzazo/capex-core-alignment-public/main/ALIGNMENT.md`). Z Sales chats only fetch this profile doc; the CS↔PI alignment doc is not relevant to that project.
+
+**Cache-busting.** GitHub's raw CDN can lag 5+ minutes between a push and the doc serving the new content. If a fetched doc shows an unexpectedly old version, append `?v=<random>` to the URL to bypass cache, or wait a few minutes and re-fetch.
+
 ### What "re-anchor" means
 
 After fetching:
@@ -208,6 +212,24 @@ When a project Claude or Richard wants to update the profile:
 ### Versioning
 
 Bump the version line at the top of `PROFILE.md` whenever a section materially changes. Format: `v1.0`, `v1.1`, `v2.0` for major rewrites. Per-section change history is captured by git, not maintained inline.
+
+---
+
+## Section 5b — Handoff Prep Command
+
+When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wrap up"), the project chat immediately produces a complete handoff package for that project, in this order:
+
+1. **Comprehensive handoff doc** — full state-of-project markdown covering: what is, where it is now (shipped, validated, known issues, in-flight), canonical reference URLs, file layout, how-to-run, locked architectural decisions, open questions, what to do first in the next chat, what NOT to do, the first-message prompt for the new chat. Format mirrors the working `CapexScout_Handoff_<date>.md` template.
+
+2. **Project Instructions update** — a copy-paste-ready block for the project's settings → Instructions field, reflecting the current state (handoff doc reference, sync URLs, trigger phrases, working-style highlights).
+
+3. **Profile doc updates if needed** — if anything material from this session belongs in the multi-project profile (new working-style preference, new device behavior, new format rule), Claude proposes the change before pushing.
+
+4. **Alignment doc updates if needed** — for CS or PI chats only: if anything from this session affects the cross-product substrate (new locked decision, schema change, vocabulary change), Claude proposes the alignment doc update before pushing.
+
+5. **Download + push terminal scripts** — copy-paste-ready bash scripts for moving the doc from `~/Downloads` into the right repo folder, then `git add / commit / push` to GitHub.
+
+The chat does all of this without further prompting after the trigger phrase. Only pauses for confirmation on profile or alignment doc changes (since those affect other projects).
 
 ---
 
