@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 10, 2026 (v1.6 — populated Z Sales context line).
+Last updated: May 10, 2026 (v1.7 — adds no-invented-time-of-day rule, stay-on-underlying-problem rule, step prefixes for multi-tool sessions, inline pasteable text for phone, no-conflation between PROFILE and per-project handoff docs; Path B handoff agent and Anthropic web_fetch caching added to open questions).
 
 ---
 
@@ -29,8 +29,10 @@ Last updated: May 10, 2026 (v1.6 — populated Z Sales context line).
 - **Copy-paste-friendly.** Every command, URL, prompt, or pasteable text gets its own code block with a copy button. Plain prose for non-pasteable text.
 - **Links go as tappable links** (`[label](url)`), not in code blocks.
 - **Label clearly:** what's manual (he does it) vs what Claude Code does. Use "you (manual)" / "paste into Claude Code" markers.
+- **Step prefixes for multi-tool sessions.** When a flow spans Terminal, Claude Code, browser, or a text editor, prefix each step with `[Terminal]`, `[Claude Code]`, `[Browser]`, or `[Plain text editor]` so context-switches are explicit. Operator should never have to guess which surface a step belongs to.
 - **Don't pair dense messages with the popup question selector** — popup blocks the read on mobile. Either keep the message tight before the picker, or ask in plain text.
 - **No comments in pasted bash blocks.** Richard's zsh does not have `INTERACTIVE_COMMENTS` enabled, so `#` lines fail with `command not found: #`. Strip explanatory comments from any block intended for direct paste; explanation goes in prose around the block.
+- **No invented time-of-day labels.** Claude has the date but not the hour, time zone, or whether a session is at "the end" of anything from operator's perspective. Don't use: "tonight," "tomorrow morning," "go to bed," "good night," "wrap up for the night," "pick this up later," "before you sleep," or similar phrases that assume contextual time information. Don't put time-of-day words in filenames, prose, or commit messages. Reference work in terms of sessions or actions ("next session," "when you're back at Mac," "after the revert"), never time-of-day. If operator wants to signal a break, they say so explicitly.
 
 ### His tendencies (so Claude can anticipate, not just react)
 - **Multitasks across 2-3 projects per session, often mid-thought.** Context switches without warning.
@@ -44,6 +46,7 @@ Last updated: May 10, 2026 (v1.6 — populated Z Sales context line).
 - **Brain-dumps with maximum detail** so capture is rich enough for first-version completeness. Take the dump, structure it, return the structured version for him to refine.
 - **Build-philosophy: build the heavy/foundational stuff right the first time** — no shortcuts that compound into tech debt. **Iterate fast on product/UX work** — that's where speed pays. Always shipping toward live, value-adding production, not lab demos.
 - **KISS over ceremony.** When he says "keep it simple," strip the deliverable to the one or two things he asked for. No bonus artifacts, no multi-step what-to-do-next lists, no preamble. Procedure expansions (Section 5b style) are fine when explicitly invoked, otherwise default to minimum-viable-response.
+- **Stays on the underlying problem.** Pushes back on workarounds when the real issue is fixable. Workarounds are for genuine blockers, not for friction we can fix properly. If Claude finds itself routing around a problem instead of solving it, surface that and ask. Canonical examples: enabling Touch ID for sudo instead of fighting password prompts; investigating pnpm version reality instead of assuming brew's number; switching Slack OAuth to bot+user tokens instead of accepting the bot-only limitation; building Vercel no-cache architecture instead of manually uploading PROFILE.md to N project knowledges.
 
 ### How he likes work to be done
 - **Visual learner.** HTML mockups, prototypes, and rendered visuals help him give better feedback. Whenever a feature can be demoed visually, demo it.
@@ -59,6 +62,7 @@ Last updated: May 10, 2026 (v1.6 — populated Z Sales context line).
 - **Recognize when a task is mobile-suited vs Mac-required** before recommending it.
 - **Easy on phone:** PDF, Word, plain text downloads work cleanly.
 - **Hard on phone:** `.md`, `.jsx`, `.html`, and other dev file types — operator may not have a smooth way to open or save them. When delivering to a mobile session, prefer PDF/Word for documents, and for code/markup files, either render the contents inline as readable text or push to GitHub so they can be viewed in a browser.
+- **Inline pasteable text in chat for phone consumption.** Anything operator needs to actually USE on phone (commands, prompts, project instructions blocks, kickoff prompts) gets inlined in chat as code blocks. Generated files (`.md`, `.jsx`) are for placement only — they go into project repos and project knowledge, never get read on phone directly. Never assume phone can open a generated `.md` to read its content.
 - **Doc handoff pattern.** Operator prefers: Claude sends the doc → he downloads it → Claude sends a copy-paste-ready terminal script (in a code block) that finds the doc in `~/Downloads`, moves it to the right place, unzips/extracts if needed, and verifies. Reduces operator decision-making to "tap download, paste script."
 
 ### File and version naming conventions
@@ -212,7 +216,7 @@ Every project session should pull the doc once at start. Silent if no changes si
 - `sync from alignment doc`
 - `re-read alignment`
 
-**Cache-busting.** GitHub's raw CDN can lag 5+ minutes between a push and the doc serving the new content. If a fetched doc shows an unexpectedly old version, append `?v=<random>` to the URL to bypass cache, or wait a few minutes and re-fetch.
+**Cache-busting.** GitHub's raw CDN can lag 5+ minutes between a push and the doc serving the new content. If a fetched doc shows an unexpectedly old version, append `?v=<random>` to the URL to bypass cache, or wait a few minutes and re-fetch. **Note:** observed in practice that Anthropic's web_fetch may also cache results across sessions independent of the GitHub CDN — a Vercel-hosted endpoint with explicit `Cache-Control: no-store` headers is the architectural fix and is under verification (see Section 7).
 
 ### What "re-anchor" means
 
@@ -251,6 +255,8 @@ When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wra
 
 The chat does all of this without further prompting after the trigger phrase. Only pauses for confirmation on profile or alignment doc changes (since those affect other projects).
 
+**Critical scope distinction.** PROFILE.md (this doc) and per-project handoff docs are SEPARATE artifacts with separate update cycles. PROFILE.md is cross-project workflow alignment (lives in `multi-project-alignment-public` repo). Per-project handoff docs are project-specific state captures (live in each project's repo + project knowledge). When updating one, do NOT update or version the other unless changes genuinely affect both. Don't conflate their version numbers, filenames, or content.
+
 ---
 
 ## Section 6 — Project Context Lines (live status)
@@ -287,7 +293,7 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 - **Account:** work
 - **Last active:** May 10, 2026
 - **Phase:** mid-build (v0.2 multi-agent orchestrator shipped; local dev environment standing up; OAuth wiring + UI live-data wiring next)
-- **Mac required for:** Claude Code dev work on Next.js 15 / pnpm project, currently `~/Downloads/z-sales-platform/`, relocating to `~/Code/z-sales-platform/`
+- **Mac required for:** Claude Code dev work on Next.js 15 / pnpm project at `~/Code/z-sales-platform/`
 - **Mobile-friendly tasks:** handoff doc review, deal-card schema review, decision capture, prompt drafting for Mac sessions, voice calibration on email drafts
 - **Cross-project blockers:** none
 
@@ -302,6 +308,9 @@ Tracked here so no project Claude invents answers:
 - **MCP server for sync.** Possible future upgrade where each project's Claude calls an MCP tool to fetch fresh doc state instead of relying on web_fetch.
 - **Daily digest.** Should a single chat or automated process produce a once-a-day digest summarizing all 3 projects' state, what changed, what needs attention next? Format and trigger TBD.
 - **Command center pattern.** Whether to graduate to a dedicated "command center" chat that pulls fresh state from all 3 projects on demand and gives the meta-view ("what's running, what's stale, what's mobile-friendly right now, what needs you next"). Currently using the per-project-chat-with-cross-awareness pattern (Option B); revisit if cross-project nudges (Section 3 #4) prove insufficient in practice.
+- **Anthropic web_fetch caching behavior.** Observed: web_fetch returns stale content for raw.githubusercontent.com URLs across sessions, even after the underlying GitHub HEAD has changed. Cache-busting query strings (`?nocache=$(date +%s)`) work from operator's local curl but web_fetch refuses to fetch URLs that weren't pre-provided. Under investigation: deploy a Vercel-hosted profile endpoint with explicit `Cache-Control: no-store, no-cache, must-revalidate` headers and verify whether web_fetch honors origin cache headers via test-file mutation. If yes, migrate all sync URLs to Vercel. If no, layer URL-versioning on top (`?v=<commit-hash>` updated per push).
+- **Path B handoff agent architecture.** Target: phone-triggerable handoff flow where operator fires a Dispatch command, Mac Claude Code receives the trigger, places generated files into project repos, commits + pushes, and writes to an iCloud-synced folder so files appear on Mac filesystem without phone-to-Mac transfer. Two manual UI steps remain (Project Knowledge upload, Project Instructions paste). Architecture defined, build pending. Open sub-question: does Anthropic's Project Knowledge surface have any API for programmatic file uploads? If yes, those two steps can also be automated.
+- **PROFILE.md fallback in project knowledge.** Some Claude project envs cannot reach `raw.githubusercontent.com` (network allowlist). When that happens, chats fall back to whatever PROFILE.md is uploaded to project knowledge. That fallback file can go stale relative to GitHub. Open question: best mechanism to keep PK copies in sync with GitHub. Path B agent could handle this; until then, manual upload after each push is the workaround.
 
 ---
 
@@ -319,6 +328,9 @@ COMMUNICATION
 - Vocabulary discipline: align on his words, stay consistent
 - KISS over ceremony when he asks for simple
 - No comments inside pasted bash blocks (his zsh fails on #)
+- No invented time-of-day labels (no "tonight" / "go to bed" / "tomorrow morning" / etc.)
+- Step prefixes [Terminal] / [Claude Code] / [Browser] / [Plain text editor] for multi-tool sessions
+- Stay on the underlying problem; flag workarounds, don't sneak them
 
 EXECUTION
 - Step-by-step instructions when doing
@@ -331,6 +343,7 @@ DEVICE
 - Mac → dev-ready options first, longer responses okay
 - Phone → tight, mobile-suited tasks, less text around popups
 - Phone hard with: .md / .jsx / .html — render inline or push to GitHub
+- Phone needs all pasteable text (commands, prompts, PI blocks) inlined in chat as code blocks
 - Dispatch → thin remote, simple one-shot tasks only
 
 CRITICAL THINKING MODE
@@ -350,6 +363,7 @@ NAMING
 - Handoff docs: <Project>_Handoff_<YYYY-MM-DD>.md
 - Profile version line: v<X.Y> with one-line change summary
 - Commit messages on profile/alignment: v<X.Y>: <change summary>
+- PROFILE.md and per-project handoff docs are SEPARATE artifacts; don't conflate
 
 COORDINATION
 - Workflow alignment yes; data/code coordination no
