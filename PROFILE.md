@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 10, 2026 (v1.7 — adds no-invented-time-of-day rule, stay-on-underlying-problem rule, step prefixes for multi-tool sessions, inline pasteable text for phone, no-conflation between PROFILE and per-project handoff docs; Path B handoff agent and Anthropic web_fetch caching added to open questions).
+Last updated: May 12, 2026 (v1.8 — clickable browser links rule with examples; new handoff doc filename convention with topic-slug + chat-code; chat-code generation at session start).
 
 ---
 
@@ -27,7 +27,7 @@ Last updated: May 10, 2026 (v1.7 — adds no-invented-time-of-day rule, stay-on-
 - **Step-by-step when executing.** Clear, sequential, easy to follow.
 - **2-4 mutually exclusive options when there's a decision.** Frame trade-offs explicitly.
 - **Copy-paste-friendly.** Every command, URL, prompt, or pasteable text gets its own code block with a copy button. Plain prose for non-pasteable text.
-- **Links go as tappable links** (`[label](url)`), not in code blocks.
+- **All browser-destination URLs render as clickable links** (`[label](url)`), never as bare URLs and never inside code blocks. Applies to localhost URLs, OAuth start endpoints, dashboards, documentation, GitHub URLs, anything the operator will click to open in a browser. Code blocks stay reserved for pasteable text (commands, prompts, content blocks), not for things meant to be clicked. Example correct: "Open [http://localhost:3000/api/oauth/slack/start](http://localhost:3000/api/oauth/slack/start) in your browser." Example wrong: putting that URL inside a triple-backtick code block.
 - **Label clearly:** what's manual (he does it) vs what Claude Code does. Use "you (manual)" / "paste into Claude Code" markers.
 - **Step prefixes for multi-tool sessions.** When a flow spans Terminal, Claude Code, browser, or a text editor, prefix each step with `[Terminal]`, `[Claude Code]`, `[Browser]`, or `[Plain text editor]` so context-switches are explicit. Operator should never have to guess which surface a step belongs to.
 - **Don't pair dense messages with the popup question selector** — popup blocks the read on mobile. Either keep the message tight before the picker, or ask in plain text.
@@ -67,14 +67,26 @@ Last updated: May 10, 2026 (v1.7 — adds no-invented-time-of-day rule, stay-on-
 
 ### File and version naming conventions
 
-Consistent across all projects. New in v1.6.
+Consistent across all projects. Updated in v1.8.
 
-- **Handoff docs:** `<Project>_Handoff_<YYYY-MM-DD>.md`. Examples: `ZSales_Handoff_2026-05-10.md`, `CapexScout_Handoff_2026-05-09.md`, `PortfolioIntelligence_Handoff_2026-05-09.md`. No spaces, no dashes inside the project name, ISO date.
+- **Handoff docs:** `<Project>_Handoff_<topic-slug>_<chat-code>.md`. Topic-slug is a short kebab-case descriptor of what the session shipped (e.g. `slack-direct-fetch-shipped`, `mcp-server-build`, `theme-ontology-locked`). Chat-code is the 5-character alphanumeric session ID generated at session start (see "Chat-code at session start" below). Examples: `ZSales_Handoff_slack-direct-fetch-shipped_x7k4m.md`, `CapexScout_Handoff_theme-ontology-locked_8t3jw.md`. No spaces, no dashes inside the project name.
 - **Project knowledge folder for superseded handoff docs:** `/history/` inside project knowledge. Old addendums and prior handoff versions move here when a new consolidated doc lands. They stop being read as live context.
 - **Profile doc version line:** `Last updated: <Month Day, Year> (v<X.Y> — <one-line change summary>).` Bump minor for section updates, major for rewrites.
 - **Per-project alignment docs:** `ALIGNMENT.md` in the project's public alignment repo. Example: `capex-core-alignment-public/ALIGNMENT.md`.
 - **Z Sales JSX files in project knowledge:** keep `z-sales-platform.jsx` (v0.1 diagnostic) and `z-sales-platform-demo.jsx` (v0.2 editorial demo) named as-is. They are referenced by the handoff doc as historical evidence and live UI seed respectively. Renaming would break the handoff doc references.
-- **Commit messages on alignment/profile pushes:** `v<X.Y>: <one-line change summary>`. Example: `v1.6: populate Z Sales context line`.
+- **Commit messages on alignment/profile pushes:** `v<X.Y>: <one-line change summary>`. Example: `v1.8: clickable links rule and new handoff filename convention`.
+
+### Chat-code at session start
+
+New in v1.8. On every new chat, after the Mac-or-phone popup, the project Claude generates a 5-character alphanumeric chat-code (lowercase letters + digits, no ambiguous chars: no `0`, `o`, `1`, `l`, `i`) and includes it on the chat title line: `<Project> - <topic> [<code>]`. Examples: `Z Sales - Slack direct-fetch shipped [x7k4m]`, `Capex Scout - Theme ontology locked [8t3jw]`.
+
+The code is the durable identifier for that session. When operator says "wrap up" / "execute handoff" / similar (Section 5b), the topic-slug is derived from what shipped in the chat and the chat-code carries through to the new handoff doc filename: `<Project>_Handoff_<topic-slug>_<code>.md`. This lets operator find any past handoff doc by chat-code without remembering dates.
+
+Code generation rules:
+- 5 chars, lowercase letters + digits only
+- Excludes `0`, `o`, `1`, `l`, `i` to avoid visual ambiguity
+- Generated fresh per chat, never reused
+- Generated client-side by the project Claude at session start, not by any external service
 
 ### Format he likes for question batches
 
@@ -111,7 +123,7 @@ He explicitly does NOT want a full "here's everything that's done, here's everyt
 |---|---|---|---|
 | **Capex Scout** | personal | mobile-first signals feed (CS) | mid-build, real LLM + EDGAR + SQLite live |
 | **Portfolio Intelligence** | personal 2 | desktop investment-ops dashboard (PI) | v16 in progress, React mockup heavy iteration |
-| **Z Sales Platform** | work | sales platform (details TBD) | needs heavy dev cycles, push toward production |
+| **Z Sales Platform** | personal (migrated May 11) | sales platform | heavy-dev, Slack direct-fetch shipped May 12, production push next |
 
 ### Project relationships
 
@@ -153,8 +165,8 @@ Mac runs **one Claude account at a time** for Claude Code dev work. Switching ac
 ### How coordination happens
 
 1. **Each project gets a short context line in this doc** describing what's running, what's blocked, and what's mobile-friendly vs Mac-required (Section 6)
-2. **Each project's Claude fetches this doc on session start** automatically. If unchanged since last fetch, silent. If updated, brief one-line notice.
-3. **Updates to this doc are deliberate** — Richard or a project Claude proposes a change, it gets pushed to GitHub, other projects see it next fetch
+2. **Each project's Claude fetches this doc on session start** automatically via the `get_profile` MCP tool. If unchanged since last fetch, silent. If updated, brief one-line notice.
+3. **Updates to this doc are deliberate** — Richard or a project Claude proposes a change, it gets pushed to GitHub, the MCP tool serves the new version live on next call.
 4. **Cross-project predictive prompts:** when a project Claude makes a change material to another project (e.g., locking a vocabulary term, finishing a heavy session, freeing the Mac, shipping a doc), it should suggest "you may want to refresh PI/Z Sales next time you open them." Operator can choose to act on it or not. Asynchronous nudge, not automation.
 5. **No automatic background sync** — fetching is on-demand or session-start, not real-time push.
 
@@ -187,11 +199,11 @@ When a project chat is opened, **ask once at session start: "Mac or phone right 
 
 ## Section 5 — Sync Protocol
 
-### Canonical URL
+### Canonical fetch path
 
-```
-https://raw.githubusercontent.com/richzazo/multi-project-alignment-public/main/PROFILE.md
-```
+MCP tool `get_profile` on the "Multi-Project Profile" custom connector at [https://multi-project-profile-mcp.vercel.app/api/mcp](https://multi-project-profile-mcp.vercel.app/api/mcp). Returns live PROFILE.md content per call. Bypasses Anthropic's `web_fetch` caching entirely.
+
+GitHub source of truth: [https://github.com/richzazo/multi-project-alignment-public/blob/main/PROFILE.md](https://github.com/richzazo/multi-project-alignment-public/blob/main/PROFILE.md). The MCP server reads from main on each call.
 
 ### Trigger phrases
 
@@ -206,7 +218,7 @@ When Richard says any of these in any project chat, fetch the doc and re-anchor:
 
 ### Auto-fetch on session start
 
-Every project session should pull the doc once at start. Silent if no changes since last fetch. One-line note if updated.
+Every project session should pull the doc once at start via the `get_profile` MCP tool. Silent if no changes since last fetch. One-line note if updated (include the version line).
 
 **Capex Scout and Portfolio Intelligence chats** also auto-fetch the CS↔PI alignment doc on session start (`https://raw.githubusercontent.com/richzazo/capex-core-alignment-public/main/ALIGNMENT.md`). Z Sales chats only fetch this profile doc; the CS↔PI alignment doc is not relevant to that project.
 
@@ -215,8 +227,6 @@ Every project session should pull the doc once at start. Silent if no changes si
 - `align pi-cap`
 - `sync from alignment doc`
 - `re-read alignment`
-
-**Cache-busting.** GitHub's raw CDN can lag 5+ minutes between a push and the doc serving the new content. If a fetched doc shows an unexpectedly old version, append `?v=<random>` to the URL to bypass cache, or wait a few minutes and re-fetch. **Note:** observed in practice that Anthropic's web_fetch may also cache results across sessions independent of the GitHub CDN — a Vercel-hosted endpoint with explicit `Cache-Control: no-store` headers is the architectural fix and is under verification (see Section 7).
 
 ### What "re-anchor" means
 
@@ -231,7 +241,8 @@ When a project Claude or Richard wants to update the profile:
 1. Propose the change in chat
 2. Once Richard confirms, draft the updated doc
 3. Push to GitHub via the standard `git add . && git commit -m "..." && git push` flow
-4. Suggest other project chats refresh next time they're opened (cross-project predictive prompt — see Section 3)
+4. After push lands on main, the MCP tool serves it live on next call. No additional cache layer.
+5. Suggest other project chats refresh next time they're opened (cross-project predictive prompt — see Section 3)
 
 ### Versioning
 
@@ -241,9 +252,9 @@ Bump the version line at the top of `PROFILE.md` whenever a section materially c
 
 ## Section 5b — Handoff Prep Command
 
-When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wrap up"), the project chat immediately produces a complete handoff package for that project, in this order:
+When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wrap up" / "execute handoff"), the project chat immediately produces a complete handoff package for that project, in this order:
 
-1. **Comprehensive handoff doc** — full state-of-project markdown covering: what is, where it is now (shipped, validated, known issues, in-flight), canonical reference URLs, file layout, how-to-run, locked architectural decisions, open questions, what to do first in the next chat, what NOT to do, the first-message prompt for the new chat. Format mirrors the working `<Project>_Handoff_<YYYY-MM-DD>.md` naming convention (Section 1).
+1. **Comprehensive handoff doc** — full state-of-project markdown covering: what is, where it is now (shipped, validated, known issues, in-flight), canonical reference URLs, file layout, how-to-run, locked architectural decisions, open questions, what to do first in the next chat, what NOT to do, the first-message prompt for the new chat. Format mirrors the working `<Project>_Handoff_<topic-slug>_<chat-code>.md` naming convention (Section 1). The chat-code carries over from the chat-code generated at session start.
 
 2. **Project Instructions update** — a copy-paste-ready block for the project's settings → Instructions field, reflecting the current state (handoff doc reference, sync URLs, trigger phrases, working-style highlights).
 
@@ -290,11 +301,11 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 - **Cross-project blockers:** none
 
 ### Z Sales Platform
-- **Account:** work
-- **Last active:** May 10, 2026
-- **Phase:** mid-build (v0.2 multi-agent orchestrator shipped; local dev environment standing up; OAuth wiring + UI live-data wiring next)
+- **Account:** personal (migrated from work-org on May 11)
+- **Last active:** May 12, 2026
+- **Phase:** mid-build pushing toward production (v0.2 multi-agent orchestrator + Slack direct-fetch shipped; production deployment with SSO is the next major arc)
 - **Mac required for:** Claude Code dev work on Next.js 15 / pnpm project at `~/Code/z-sales-platform/`
-- **Mobile-friendly tasks:** handoff doc review, deal-card schema review, decision capture, prompt drafting for Mac sessions, voice calibration on email drafts
+- **Mobile-friendly tasks:** handoff doc review, deal-card schema review, decision capture, prompt drafting for Mac sessions, voice calibration on email drafts, Gmail tag-taxonomy decisions
 - **Cross-project blockers:** none
 
 ---
@@ -305,10 +316,9 @@ Tracked here so no project Claude invents answers:
 
 - **Cross-account dev workflow.** Is there a smooth pattern for migrating a project temporarily to a different account when one account is compute-bound? (Move handoff doc + repo access?) — currently asynchronous and manual.
 - **Z Sales Platform alignment doc.** Currently uses only this profile + project knowledge. May graduate to a project-level `ALIGNMENT.md` if multi-user (Lucas) onboarding makes shared substrate decisions worth tracking publicly.
-- **MCP server for sync.** Possible future upgrade where each project's Claude calls an MCP tool to fetch fresh doc state instead of relying on web_fetch.
+- **Vercel-hosted handoff doc service shape.** Should the same Multi-Project MCP server also serve per-project handoff docs (so any new chat can `get_handoff_doc(project='zsales')` and pull live content)? Single tool with `project` param, or multiple project-specific tools? Authentication if/when handoff doc has sensitive content? Active arc for next Z Sales session.
 - **Daily digest.** Should a single chat or automated process produce a once-a-day digest summarizing all 3 projects' state, what changed, what needs attention next? Format and trigger TBD.
 - **Command center pattern.** Whether to graduate to a dedicated "command center" chat that pulls fresh state from all 3 projects on demand and gives the meta-view ("what's running, what's stale, what's mobile-friendly right now, what needs you next"). Currently using the per-project-chat-with-cross-awareness pattern (Option B); revisit if cross-project nudges (Section 3 #4) prove insufficient in practice.
-- **Anthropic web_fetch caching behavior.** Observed: web_fetch returns stale content for raw.githubusercontent.com URLs across sessions, even after the underlying GitHub HEAD has changed. Cache-busting query strings (`?nocache=$(date +%s)`) work from operator's local curl but web_fetch refuses to fetch URLs that weren't pre-provided. Under investigation: deploy a Vercel-hosted profile endpoint with explicit `Cache-Control: no-store, no-cache, must-revalidate` headers and verify whether web_fetch honors origin cache headers via test-file mutation. If yes, migrate all sync URLs to Vercel. If no, layer URL-versioning on top (`?v=<commit-hash>` updated per push).
 - **Path B handoff agent architecture.** Target: phone-triggerable handoff flow where operator fires a Dispatch command, Mac Claude Code receives the trigger, places generated files into project repos, commits + pushes, and writes to an iCloud-synced folder so files appear on Mac filesystem without phone-to-Mac transfer. Two manual UI steps remain (Project Knowledge upload, Project Instructions paste). Architecture defined, build pending. Open sub-question: does Anthropic's Project Knowledge surface have any API for programmatic file uploads? If yes, those two steps can also be automated.
 - **PROFILE.md fallback in project knowledge.** Some Claude project envs cannot reach `raw.githubusercontent.com` (network allowlist). When that happens, chats fall back to whatever PROFILE.md is uploaded to project knowledge. That fallback file can go stale relative to GitHub. Open question: best mechanism to keep PK copies in sync with GitHub. Path B agent could handle this; until then, manual upload after each push is the workaround.
 
@@ -323,7 +333,7 @@ COMMUNICATION
 - Direct, no preamble
 - Short chunks > long monologues
 - Push back when vague; no sycophancy
-- Code blocks for pasteable text only; links as tappable
+- Code blocks for pasteable text only; ALL browser URLs render as clickable links, never bare or in code blocks
 - 2-4 mutually exclusive options on decisions
 - Vocabulary discipline: align on his words, stay consistent
 - KISS over ceremony when he asks for simple
@@ -360,10 +370,18 @@ POPUP QUESTIONS
 - Recommend by prefix in prose ("I'm leaning C")
 
 NAMING
-- Handoff docs: <Project>_Handoff_<YYYY-MM-DD>.md
+- Handoff docs: <Project>_Handoff_<topic-slug>_<chat-code>.md (kebab-case topic-slug, 5-char chat-code)
+- Chat-code: 5 chars, lowercase letters + digits, no 0/o/1/l/i
 - Profile version line: v<X.Y> with one-line change summary
 - Commit messages on profile/alignment: v<X.Y>: <change summary>
 - PROFILE.md and per-project handoff docs are SEPARATE artifacts; don't conflate
+
+SESSION START
+- Fetch profile via get_profile MCP tool
+- Ask Mac or phone
+- Generate 5-char chat-code, include in title: "<Project> - <topic> [<code>]"
+- 2-3 line recap, 2-3 options
+- Don't dump full status
 
 COORDINATION
 - Workflow alignment yes; data/code coordination no
