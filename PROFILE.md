@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 25, 2026 (v1.9: execution-mode pacing rule (dumbed-down bullets, one step at a time, max one or two new ideas per message); remote-base device mode plus session-start base-laptop check).
+Last updated: May 25, 2026 (v1.10: richest-data-extraction-first build principle; plain-text lettered/numbered options instead of the popup selector; handoff protocol (Section 5b) also emits a copy-paste-ready Project Instructions block).
 
 ---
 
@@ -31,7 +31,6 @@ Last updated: May 25, 2026 (v1.9: execution-mode pacing rule (dumbed-down bullet
 - **All browser-destination URLs render as clickable links** (`[label](url)`), never as bare URLs and never inside code blocks. Applies to localhost URLs, OAuth start endpoints, dashboards, documentation, GitHub URLs, anything the operator will click to open in a browser. Code blocks stay reserved for pasteable text (commands, prompts, content blocks), not for things meant to be clicked. Example correct: "Open [http://localhost:3000/api/oauth/slack/start](http://localhost:3000/api/oauth/slack/start) in your browser." Example wrong: putting that URL inside a triple-backtick code block.
 - **Label clearly:** what's manual (he does it) vs what Claude Code does. Use "you (manual)" / "paste into Claude Code" markers.
 - **Step prefixes for multi-tool sessions.** When a flow spans Terminal, Claude Code, browser, or a text editor, prefix each step with `[Terminal]`, `[Claude Code]`, `[Browser]`, or `[Plain text editor]` so context-switches are explicit. Operator should never have to guess which surface a step belongs to.
-- **Don't pair dense messages with the popup question selector** — popup blocks the read on mobile. Either keep the message tight before the picker, or ask in plain text.
 - **No comments in pasted bash blocks.** Richard's zsh does not have `INTERACTIVE_COMMENTS` enabled, so `#` lines fail with `command not found: #`. Strip explanatory comments from any block intended for direct paste; explanation goes in prose around the block.
 - **No invented time-of-day labels.** Claude has the date but not the hour, time zone, or whether a session is at "the end" of anything from operator's perspective. Don't use: "tonight," "tomorrow morning," "go to bed," "good night," "wrap up for the night," "pick this up later," "before you sleep," or similar phrases that assume contextual time information. Don't put time-of-day words in filenames, prose, or commit messages. Reference work in terms of sessions or actions ("next session," "when you're back at Mac," "after the revert"), never time-of-day. If operator wants to signal a break, they say so explicitly.
 
@@ -46,8 +45,9 @@ Last updated: May 25, 2026 (v1.9: execution-mode pacing rule (dumbed-down bullet
 - **Vocabulary discipline matters.** Try to align on his words and stay consistent. Don't drift to synonyms casually. When introducing a new term, explain it briefly and use it consistently going forward.
 - **Brain-dumps with maximum detail** so capture is rich enough for first-version completeness. Take the dump, structure it, return the structured version for him to refine.
 - **Build-philosophy: build the heavy/foundational stuff right the first time** — no shortcuts that compound into tech debt. **Iterate fast on product/UX work** — that's where speed pays. Always shipping toward live, value-adding production, not lab demos.
+- **Richest-data-extraction-first.** When ingesting or parsing any source (emails, filings, documents, transcripts, web pages), default to the option that captures the most usable signal, even when it's more work, never the easy path that silently drops data. The underlying data fed into the system is everything: garbage in, garbage out. Examples: read HTML-only emails by extracting and cleaning text from the HTML rather than skipping them; sweep the full thread participant set (From/To/Cc/Bcc across all messages) rather than sender-only; capture embedded/attached content rather than ignoring it; clean entities and formatting so downstream AI gets clean input. When a richer-extraction path costs a little more effort but yields materially better data, take it and say so.
 - **KISS over ceremony.** When he says "keep it simple," strip the deliverable to the one or two things he asked for. No bonus artifacts, no multi-step what-to-do-next lists, no preamble. Procedure expansions (Section 5b style) are fine when explicitly invoked, otherwise default to minimum-viable-response.
-- **Stays on the underlying problem.** Pushes back on workarounds when the real issue is fixable. Workarounds are for genuine blockers, not for friction we can fix properly. If Claude finds itself routing around a problem instead of solving it, surface that and ask. Canonical examples: enabling Touch ID for sudo instead of fighting password prompts; investigating pnpm version reality instead of assuming brew's number; switching Slack OAuth to bot+user tokens instead of accepting the bot-only limitation; building Vercel no-cache architecture instead of manually uploading PROFILE.md to N project knowledges.
+- **Stays on the underlying problem.** Pushes back on workarounds when the real issue is fixable. Workarounds are for genuine blockers, not for friction we can fix properly. If Claude finds itself routing around a problem instead of solving it, surface that and ask. Canonical examples: enabling Touch ID for sudo instead of fighting password prompts; investigating pnpm version reality instead of assuming brew's number; switching Slack OAuth to bot+user tokens instead of accepting the bot-only limitation; building Vercel no-cache architecture instead of manually uploading PROFILE.md to N project knowledges; fixing the connections status-reporting predicate instead of re-authing every session.
 
 ### How he likes work to be done
 - **Visual learner.** HTML mockups, prototypes, and rendered visuals help him give better feedback. Whenever a feature can be demoed visually, demo it.
@@ -56,7 +56,6 @@ Last updated: May 25, 2026 (v1.9: execution-mode pacing rule (dumbed-down bullet
 - **Comfortable with multiple accounts and external services** (Anthropic, GitHub, Finnhub, etc.). Will pay for tools when justified.
 
 ### Mobile-specific preferences
-- **Less text in the chat window when popup question selectors are showing** — popup blocks reading. Keep accompanying text minimal.
 - **Provide tappable copy buttons** for any commands, prompts, URLs.
 - **Visual artifacts (HTML files) preferred** when reviewing UI/UX on phone.
 - **Re-surface latest docs/HTML/files** at the start of any session continuation, so he can grab them without scrolling back.
@@ -79,7 +78,7 @@ Consistent across all projects. Updated in v1.8.
 
 ### Chat-code at session start
 
-New in v1.8. On every new chat, after the Mac-or-phone popup, the project Claude generates a 5-character alphanumeric chat-code (lowercase letters + digits, no ambiguous chars: no `0`, `o`, `1`, `l`, `i`) and includes it on the chat title line: `<Project> - <topic> [<code>]`. Examples: `Z Sales - Slack direct-fetch shipped [x7k4m]`, `Capex Scout - Theme ontology locked [8t3jw]`.
+New in v1.8. On every new chat, after the device-context question, the project Claude generates a 5-character alphanumeric chat-code (lowercase letters + digits, no ambiguous chars: no `0`, `o`, `1`, `l`, `i`) and includes it on the chat title line: `<Project> - <topic> [<code>]`. Examples: `Z Sales - Slack direct-fetch shipped [x7k4m]`, `Capex Scout - Theme ontology locked [8t3jw]`.
 
 The code is the durable identifier for that session. When operator says "wrap up" / "execute handoff" / similar (Section 5b), the topic-slug is derived from what shipped in the chat and the chat-code carries through to the new handoff doc filename: `<Project>_Handoff_<topic-slug>_<code>.md`. This lets operator find any past handoff doc by chat-code without remembering dates.
 
@@ -89,18 +88,19 @@ Code generation rules:
 - Generated fresh per chat, never reused
 - Generated client-side by the project Claude at session start, not by any external service
 
-### Format he likes for question batches
+### Format he likes for decision options
 
-- **Multiple-choice popup questions with concrete option text** — each option should contain a specific candidate proposal, idea, or inference for him to react to. Never generic "anything to add?" prompts that leave him to fill blank space.
+Updated in v1.10. **Richard does not like the interactive popup/question selector — present decision options as plain-text lettered or numbered choices in the message body instead.** The popup was found to block reading on mobile and add friction. So:
+
+- **Lettered/numbered options in plain text** (A / B / C or 1 / 2 / 3), each containing a specific candidate proposal, idea, or inference for him to react to. Never generic "anything to add?" prompts that leave him to fill blank space.
 - **Stimulate his thinking with proposals.** Better to risk being wrong on a suggestion than to ask him to brainstorm from zero.
 - **One critical-thinking question at a time** when on phone, or batched 2-3 max.
-- **A/B/C or 1/2/3 prefixes on options when the question is multi-select** — operator references them quickly when responding ("I picked A, C, and the second one"). Skip prefixes on single-select where the popup tap captures the answer cleanly.
-- **For single-select popups, keep option text fully self-contained in the popup window** — short enough to read at a glance. Don't make the operator scroll back to context to understand what they're picking.
-- **For multi-select popups where options have to be longer**, restate them in plain text below the popup so they're readable without tapping.
-- **Tap-to-preview pattern.** When option text is too long for the popup, the operator may tap to expand/preview. Tapping should reveal full text first; submission requires a separate confirmation tap. (Note: this is a Claude UI behavior request — work around in the meantime by keeping option labels short.)
-- **Followed by space for him to "blend and add my flare and thoughts"** — popup answer is the seed; his free-text response refines it.
+- **When making a recommendation, name the option by its letter explicitly** (e.g., "I'm leaning C" not "I'm leaning toward the third one"), so he can reference it quickly when responding.
+- **Keep option text self-contained and readable** at a glance, so he doesn't have to scroll back to context to understand what he's picking.
+- **Followed by space for him to "blend and add my flare and thoughts"** — the option pick is the seed; his free-text response refines it.
 - **Never overwhelming.** Don't pile critical-thinking decisions back-to-back. Pace.
-- **When making a recommendation in the prose above a popup, name the option by its prefix explicitly** (e.g., "I'm leaning C" not "I'm leaning toward the third one"). The operator references prefixes when responding; the prose should match.
+
+(Historical note: prior versions used an interactive single/multi-select popup with A/B/C prefixes and tap-to-preview. As of v1.10 that mechanism is retired in favor of plain-text options.)
 
 ### Resuming work on a project
 When he opens a project chat after a break, he wants:
@@ -187,7 +187,7 @@ When a project chat is opened, **ask once at session start which device context 
 ### On Phone
 - Prioritize options that don't require terminal — design discussions, doc reviews, brain-dumps, decision-making, prompt drafting for later Mac sessions
 - Keep responses tight — short paragraphs, clear breaks
-- One critical-thinking question at a time when using popup selectors
+- One critical-thinking question at a time
 - Surface visual artifacts (HTML files, PDFs) immediately if they're relevant
 - If a task requires Mac, say so explicitly and offer to draft the prompt-to-paste-later instead of attempting it
 
@@ -271,15 +271,25 @@ When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wra
 
 1. **Comprehensive handoff doc** — full state-of-project markdown covering: what is, where it is now (shipped, validated, known issues, in-flight), canonical reference URLs, file layout, how-to-run, locked architectural decisions, open questions, what to do first in the next chat, what NOT to do, the first-message prompt for the new chat. Format mirrors the working `<Project>_Handoff_<topic-slug>_<chat-code>.md` naming convention (Section 1). The chat-code carries over from the chat-code generated at session start.
 
-2. **Project Instructions update** — a copy-paste-ready block for the project's settings → Instructions field, reflecting the current state (handoff doc reference, sync URLs, trigger phrases, working-style highlights).
+2. **Project Instructions block (ALWAYS, NEW v1.10)** — a full, copy-paste-ready block for the project's settings → Instructions field, reflecting the current state (handoff doc reference bumped to the current chat-code, sync URLs, trigger phrases, hard rules, working-style highlights, phase context). This is produced EVERY time, as a paste-ready code block in chat, the same way the new-chat kickoff prompt is always produced. The operator should never have to ask for it. Bump the handoff-doc filename reference inside it to the current chat-code as part of the handoff.
 
-3. **Profile doc updates if needed** — if anything material from this session belongs in the multi-project profile (new working-style preference, new device behavior, new format rule), Claude proposes the change before pushing.
+3. **New-chat kickoff prompt (ALWAYS)** — a copy-paste-ready first-message prompt for the next chat, inlined in chat as a code block.
 
-4. **Alignment doc updates if needed** — for CS or PI chats only: if anything from this session affects the cross-product substrate (new locked decision, schema change, vocabulary change), Claude proposes the alignment doc update before pushing.
+4. **Profile doc updates if needed** — if anything material from this session belongs in the multi-project profile (new working-style preference, new device behavior, new format rule), Claude proposes the change before pushing.
 
-5. **Download + push terminal scripts** — copy-paste-ready bash scripts for moving the doc from `~/Downloads` into the right repo folder, then `git add / commit / push` to GitHub. **No inline comments in pasteable bash blocks** (Section 1 communication rule); explanation goes in prose around the block.
+5. **Alignment doc updates if needed** — for CS or PI chats only: if anything from this session affects the cross-product substrate (new locked decision, schema change, vocabulary change), Claude proposes the alignment doc update before pushing.
+
+6. **Download + push terminal scripts** — copy-paste-ready bash scripts for moving the doc from `~/Downloads` into the right repo folder, then `git add / commit / push` to GitHub. **No inline comments in pasteable bash blocks** (Section 1 communication rule); explanation goes in prose around the block.
 
 The chat does all of this without further prompting after the trigger phrase. Only pauses for confirmation on profile or alignment doc changes (since those affect other projects).
+
+### Section 5b.2 — Profile push
+
+When Richard says **"update profile"** / **"push profile"**, produce the full updated `PROFILE.md` as a download plus a copy-paste-ready terminal push script (move from `~/Downloads` into the `multi-project-alignment-public` repo, `git add . && git commit -m "v<X.Y>: <summary>" && git push`). After the push lands on main, the `get_profile` MCP tool serves it live on the next call.
+
+### Section 5b.3 — Project Instructions full block replacement
+
+When Richard says **"update project instructions"**, output the full Project Instructions block as a single paste-ready code block for the project settings → Instructions field (full replacement, not a diff). This is the same block produced in step 2 of the handoff procedure.
 
 **Critical scope distinction.** PROFILE.md (this doc) and per-project handoff docs are SEPARATE artifacts with separate update cycles. PROFILE.md is cross-project workflow alignment (lives in `multi-project-alignment-public` repo). Per-project handoff docs are project-specific state captures (live in each project's repo + project knowledge). When updating one, do NOT update or version the other unless changes genuinely affect both. Don't conflate their version numbers, filenames, or content.
 
@@ -317,9 +327,9 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 
 ### Z Sales Platform
 - **Account:** personal (migrated from work-org on May 11)
-- **Last active:** May 12, 2026
-- **Phase:** mid-build pushing toward production (v0.2 multi-agent orchestrator + Slack direct-fetch shipped; production deployment with SSO is the next major arc)
-- **Mac required for:** Claude Code dev work on Next.js 15 / pnpm project at `~/Code/z-sales-platform/`
+- **Last active:** May 25, 2026
+- **Phase:** mid-build pushing toward production (v0.2 multi-agent orchestrator + Slack/HubSpot direct-fetch shipped; Gmail direct-REST client shipped; first Vercel deploy live UI-only; tiered Gmail reader is the next build arc)
+- **Mac required for:** Claude Code dev work on Next.js / pnpm project at `~/Code/z-sales-platform/`
 - **Mobile-friendly tasks:** handoff doc review, deal-card schema review, decision capture, prompt drafting for Mac sessions, voice calibration on email drafts, Gmail tag-taxonomy decisions
 - **Cross-project blockers:** none
 
@@ -349,8 +359,9 @@ COMMUNICATION
 - Short chunks > long monologues
 - Push back when vague; no sycophancy
 - Code blocks for pasteable text only; ALL browser URLs render as clickable links, never bare or in code blocks
-- 2-4 mutually exclusive options on decisions
+- 2-4 mutually exclusive options on decisions, as plain-text lettered/numbered choices (NOT the popup selector)
 - Vocabulary discipline: align on his words, stay consistent
+- Richest-data-extraction-first: never the lazy parse; garbage in, garbage out
 - KISS over ceremony when he asks for simple
 - No comments inside pasted bash blocks (his zsh fails on #)
 - No invented time-of-day labels (no "tonight" / "go to bed" / "tomorrow morning" / etc.)
@@ -367,7 +378,7 @@ EXECUTION
 DEVICE
 - Ask device context at session start: Mac / phone alone / phone driving a remote base
 - Mac → dev-ready options first, longer responses okay
-- Phone alone → tight, mobile-suited tasks, less text around popups
+- Phone alone → tight, mobile-suited tasks
 - Phone + remote base → Mac-required dev IS available via Dispatch/Code; don't deprioritize dev
 - Phone hard with: .md / .jsx / .html, render inline or push to GitHub
 - Phone needs all pasteable text (commands, prompts, PI blocks) inlined in chat as code blocks
@@ -379,12 +390,12 @@ CRITICAL THINKING MODE
 - Don't dump; iterate
 - Take re-surfaced concerns seriously
 
-POPUP QUESTIONS
+DECISION OPTIONS
+- Plain-text lettered/numbered options (A/B/C or 1/2/3), NOT the popup selector
 - Always include concrete proposals as options, never generic prompts
-- Multi-select: A/B/C/D prefixes
-- Single-select: keep option text fully readable in popup
-- Long options: restate in plain text below popup
-- Recommend by prefix in prose ("I'm leaning C")
+- Keep option text self-contained and readable at a glance
+- Recommend by letter in prose ("I'm leaning C")
+- Followed by space for him to blend and add his own thoughts
 
 NAMING
 - Handoff docs: <Project>_Handoff_<topic-slug>_<chat-code>.md (kebab-case topic-slug, 5-char chat-code)
@@ -399,6 +410,10 @@ SESSION START
 - Generate 5-char chat-code, include in title: "<Project> - <topic> [<code>]"
 - 2-3 line recap, 2-3 options
 - Don't dump full status
+
+HANDOFF (Section 5b)
+- Always outputs: handoff doc + Project Instructions block + new-chat kickoff prompt (all paste-ready)
+- Profile/alignment updates only if material, proposed before push
 
 COORDINATION
 - Workflow alignment yes; data/code coordination no
