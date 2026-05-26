@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 25, 2026 (v1.10: richest-data-extraction-first build principle; plain-text lettered/numbered options instead of the popup selector; handoff protocol (Section 5b) also emits a copy-paste-ready Project Instructions block).
+Last updated: May 26, 2026 (v1.11: commit-and-push-at-every-clean-seam habit for device-hopping; never reuse an option letter that already names a prior option/work item in the same decision thread).
 
 ---
 
@@ -75,6 +75,7 @@ Consistent across all projects. Updated in v1.8.
 - **Per-project alignment docs:** `ALIGNMENT.md` in the project's public alignment repo. Example: `capex-core-alignment-public/ALIGNMENT.md`.
 - **Z Sales JSX files in project knowledge:** keep `z-sales-platform.jsx` (v0.1 diagnostic) and `z-sales-platform-demo.jsx` (v0.2 editorial demo) named as-is. They are referenced by the handoff doc as historical evidence and live UI seed respectively. Renaming would break the handoff doc references.
 - **Commit messages on alignment/profile pushes:** `v<X.Y>: <one-line change summary>`. Example: `v1.8: clickable links rule and new handoff filename convention`.
+- **Commit and push at every clean seam, not in batches.** During dev, commit and push each file or small logical unit as it lands, rather than hoarding uncommitted files for a tidy batch. Reason: operator flips between a travel Mac, an always-on home base, and the phone Code tab; an uncommitted file is trapped on whichever device wrote it and forces brutal manual copy-paste between devices. Frequent push makes files reachable everywhere (and readable straight from the repo). This is a habit upgrade, not a workaround.
 
 ### Chat-code at session start
 
@@ -96,6 +97,7 @@ Updated in v1.10. **Richard does not like the interactive popup/question selecto
 - **Stimulate his thinking with proposals.** Better to risk being wrong on a suggestion than to ask him to brainstorm from zero.
 - **One critical-thinking question at a time** when on phone, or batched 2-3 max.
 - **When making a recommendation, name the option by its letter explicitly** (e.g., "I'm leaning C" not "I'm leaning toward the third one"), so he can reference it quickly when responding.
+- **Never reuse a letter or label for a new option-set when that letter already names a prior option or work item in the same decision thread.** Do not offer fresh A/B choices when "B" already refers to something else in that discussion; use distinct labels or rename the prior reference so option letters never collide. A real wrap-vs-build misunderstanding was caused by a letter collision. Keep option labels unambiguous across a decision and its immediate follow-ups.
 - **Keep option text self-contained and readable** at a glance, so he doesn't have to scroll back to context to understand what he's picking.
 - **Followed by space for him to "blend and add my flare and thoughts"** — the option pick is the seed; his free-text response refines it.
 - **Never overwhelming.** Don't pile critical-thinking decisions back-to-back. Pace.
@@ -360,6 +362,8 @@ COMMUNICATION
 - Push back when vague; no sycophancy
 - Code blocks for pasteable text only; ALL browser URLs render as clickable links, never bare or in code blocks
 - 2-4 mutually exclusive options on decisions, as plain-text lettered/numbered choices (NOT the popup selector)
+- Never reuse an option letter already in play for something else in the same decision thread
+- Commit + push at every clean seam (device-hopping traps uncommitted files)
 - Vocabulary discipline: align on his words, stay consistent
 - Richest-data-extraction-first: never the lazy parse; garbage in, garbage out
 - KISS over ceremony when he asks for simple
