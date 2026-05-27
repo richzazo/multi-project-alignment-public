@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 26, 2026 (v1.11: commit-and-push-at-every-clean-seam habit for device-hopping; never reuse an option letter that already names a prior option/work item in the same decision thread).
+Last updated: May 26, 2026 (v1.12: hard-gate surface tags on every paste-block incl one-liners; pre-send check; profile/alignment changes applied at handoff not mid-session; handoffs must comprehensively capture the entire chat).
 
 ---
 
@@ -30,7 +30,7 @@ Last updated: May 26, 2026 (v1.11: commit-and-push-at-every-clean-seam habit for
 - **Copy-paste-friendly.** Every command, URL, prompt, or pasteable text gets its own code block with a copy button. Plain prose for non-pasteable text.
 - **All browser-destination URLs render as clickable links** (`[label](url)`), never as bare URLs and never inside code blocks. Applies to localhost URLs, OAuth start endpoints, dashboards, documentation, GitHub URLs, anything the operator will click to open in a browser. Code blocks stay reserved for pasteable text (commands, prompts, content blocks), not for things meant to be clicked. Example correct: "Open [http://localhost:3000/api/oauth/slack/start](http://localhost:3000/api/oauth/slack/start) in your browser." Example wrong: putting that URL inside a triple-backtick code block.
 - **Label clearly:** what's manual (he does it) vs what Claude Code does. Use "you (manual)" / "paste into Claude Code" markers.
-- **Step prefixes for multi-tool sessions.** When a flow spans Terminal, Claude Code, browser, or a text editor, prefix each step with `[Terminal]`, `[Claude Code]`, `[Browser]`, or `[Plain text editor]` so context-switches are explicit. Operator should never have to guess which surface a step belongs to.
+- **Step prefixes for multi-tool sessions.** EVERY message containing a command or pasteable block must open with its surface tag — `[Terminal]`, `[Claude Code]`, `[Browser]`, or `[Plain text editor]` — with NO exceptions, including one-line greps, verification commands, and quick re-checks. The operator should never have to guess which surface a step belongs to. If a message has a paste-block and no tag, it is wrong before it sends.
 - **No comments in pasted bash blocks.** Richard's zsh does not have `INTERACTIVE_COMMENTS` enabled, so `#` lines fail with `command not found: #`. Strip explanatory comments from any block intended for direct paste; explanation goes in prose around the block.
 - **No invented time-of-day labels.** Claude has the date but not the hour, time zone, or whether a session is at "the end" of anything from operator's perspective. Don't use: "tonight," "tomorrow morning," "go to bed," "good night," "wrap up for the night," "pick this up later," "before you sleep," or similar phrases that assume contextual time information. Don't put time-of-day words in filenames, prose, or commit messages. Reference work in terms of sessions or actions ("next session," "when you're back at Mac," "after the revert"), never time-of-day. If operator wants to signal a break, they say so explicitly.
 
@@ -271,7 +271,7 @@ Bump the version line at the top of `PROFILE.md` whenever a section materially c
 
 When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wrap up" / "execute handoff"), the project chat immediately produces a complete handoff package for that project, in this order:
 
-1. **Comprehensive handoff doc** — full state-of-project markdown covering: what is, where it is now (shipped, validated, known issues, in-flight), canonical reference URLs, file layout, how-to-run, locked architectural decisions, open questions, what to do first in the next chat, what NOT to do, the first-message prompt for the new chat. Format mirrors the working `<Project>_Handoff_<topic-slug>_<chat-code>.md` naming convention (Section 1). The chat-code carries over from the chat-code generated at session start.
+1. **Comprehensive handoff doc** — full state-of-project markdown covering: what is, where it is now (shipped, validated, known issues, in-flight), canonical reference URLs, file layout, how-to-run, locked architectural decisions, open questions, what to do first in the next chat, what NOT to do, the first-message prompt for the new chat. Format mirrors the working `<Project>_Handoff_<topic-slug>_<chat-code>.md` naming convention (Section 1). The chat-code carries over from the chat-code generated at session start. Before producing it, re-walk the ENTIRE chat and capture every substantive item — brain-dumps, decisions, side-tangents, scope-expansion ideas, parked features — routed into its correct section, not just what was coded. Check each item against the existing doc and add/update every applicable area. A handoff that captures only the code delta is incomplete.
 
 2. **Project Instructions block (ALWAYS, NEW v1.10)** — a full, copy-paste-ready block for the project's settings → Instructions field, reflecting the current state (handoff doc reference bumped to the current chat-code, sync URLs, trigger phrases, hard rules, working-style highlights, phase context). This is produced EVERY time, as a paste-ready code block in chat, the same way the new-chat kickoff prompt is always produced. The operator should never have to ask for it. Bump the handoff-doc filename reference inside it to the current chat-code as part of the handoff.
 
@@ -284,6 +284,8 @@ When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wra
 6. **Download + push terminal scripts** — copy-paste-ready bash scripts for moving the doc from `~/Downloads` into the right repo folder, then `git add / commit / push` to GitHub. **No inline comments in pasteable bash blocks** (Section 1 communication rule); explanation goes in prose around the block.
 
 The chat does all of this without further prompting after the trigger phrase. Only pauses for confirmation on profile or alignment doc changes (since those affect other projects).
+
+**Profile and alignment doc changes are applied at the END of a chat via the handoff protocol — proposed in-session, pushed at handoff. Never push a profile/alignment change mid-session.**
 
 ### Section 5b.2 — Profile push
 
@@ -375,6 +377,7 @@ COMMUNICATION
 EXECUTION
 - Step-by-step instructions when doing
 - Execution pacing: dumbed-down bullets, one step at a time, wait for confirm, max 1-2 new ideas per message
+- PRE-SEND CHECK: before sending, does every pasteable block carry a [surface] tag and sit in its own code block, one step at a time? If not, fix before sending.
 - Label manual vs Claude Code
 - Re-surface latest docs/files at session continuation
 - Doc handoff pattern: send doc → script to move it → verify
@@ -417,7 +420,8 @@ SESSION START
 
 HANDOFF (Section 5b)
 - Always outputs: handoff doc + Project Instructions block + new-chat kickoff prompt (all paste-ready)
-- Profile/alignment updates only if material, proposed before push
+- Handoff doc must comprehensively capture the ENTIRE chat (brain-dumps, decisions, tangents, parked ideas), not just code deltas
+- Profile/alignment changes applied at handoff only, never mid-session; proposed before push
 
 COORDINATION
 - Workflow alignment yes; data/code coordination no
