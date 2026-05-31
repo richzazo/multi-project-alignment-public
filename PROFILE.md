@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 26, 2026 (v1.12: hard-gate surface tags on every paste-block incl one-liners; pre-send check; profile/alignment changes applied at handoff not mid-session; handoffs must comprehensively capture the entire chat).
+Last updated: May 30, 2026 (v1.13: terse Claude Code output rule to conserve context; report diff + commit hash + requested fields only, not full reasoning transcripts).
 
 ---
 
@@ -31,6 +31,7 @@ Last updated: May 26, 2026 (v1.12: hard-gate surface tags on every paste-block i
 - **All browser-destination URLs render as clickable links** (`[label](url)`), never as bare URLs and never inside code blocks. Applies to localhost URLs, OAuth start endpoints, dashboards, documentation, GitHub URLs, anything the operator will click to open in a browser. Code blocks stay reserved for pasteable text (commands, prompts, content blocks), not for things meant to be clicked. Example correct: "Open [http://localhost:3000/api/oauth/slack/start](http://localhost:3000/api/oauth/slack/start) in your browser." Example wrong: putting that URL inside a triple-backtick code block.
 - **Label clearly:** what's manual (he does it) vs what Claude Code does. Use "you (manual)" / "paste into Claude Code" markers.
 - **Step prefixes for multi-tool sessions.** EVERY message containing a command or pasteable block must open with its surface tag — `[Terminal]`, `[Claude Code]`, `[Browser]`, or `[Plain text editor]` — with NO exceptions, including one-line greps, verification commands, and quick re-checks. The operator should never have to guess which surface a step belongs to. If a message has a paste-block and no tag, it is wrong before it sends.
+- **Terse Claude Code output (NEW v1.13).** When directing Claude Code, instruct it to report back tersely: the diff summary (files + line counts), the commit hash, and ONLY the specific fields or values that were asked for. Do NOT let it return full multi-minute reasoning transcripts, step-by-step narration of every read, or long "things to know" essays by default. Those transcripts are the single largest avoidable context cost in a session and are the main driver of premature handoffs. If a detail genuinely matters (a real error, an unexpected result, a decision that needs operator input), surface that specifically; otherwise stay terse. Applies across all projects. The operator can always ask for more detail on a specific point.
 - **No comments in pasted bash blocks.** Richard's zsh does not have `INTERACTIVE_COMMENTS` enabled, so `#` lines fail with `command not found: #`. Strip explanatory comments from any block intended for direct paste; explanation goes in prose around the block.
 - **No invented time-of-day labels.** Claude has the date but not the hour, time zone, or whether a session is at "the end" of anything from operator's perspective. Don't use: "tonight," "tomorrow morning," "go to bed," "good night," "wrap up for the night," "pick this up later," "before you sleep," or similar phrases that assume contextual time information. Don't put time-of-day words in filenames, prose, or commit messages. Reference work in terms of sessions or actions ("next session," "when you're back at Mac," "after the revert"), never time-of-day. If operator wants to signal a break, they say so explicitly.
 
@@ -331,8 +332,8 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 
 ### Z Sales Platform
 - **Account:** personal (migrated from work-org on May 11)
-- **Last active:** May 25, 2026
-- **Phase:** mid-build pushing toward production (v0.2 multi-agent orchestrator + Slack/HubSpot direct-fetch shipped; Gmail direct-REST client shipped; first Vercel deploy live UI-only; tiered Gmail reader is the next build arc)
+- **Last active:** May 30, 2026
+- **Phase:** mid-build pushing toward production (v0.2 multi-agent orchestrator + Slack/HubSpot direct-fetch shipped; Gmail direct-REST client shipped; AI-native rolling Gmail reader + model-read funnel live; Review-gate feedback-driven re-read shipped and UI-proven; first Vercel deploy live UI-only; gcal reader is the next build arc)
 - **Mac required for:** Claude Code dev work on Next.js / pnpm project at `~/Code/z-sales-platform/`
 - **Mobile-friendly tasks:** handoff doc review, deal-card schema review, decision capture, prompt drafting for Mac sessions, voice calibration on email drafts, Gmail tag-taxonomy decisions
 - **Cross-project blockers:** none
@@ -379,6 +380,7 @@ EXECUTION
 - Execution pacing: dumbed-down bullets, one step at a time, wait for confirm, max 1-2 new ideas per message
 - PRE-SEND CHECK: before sending, does every pasteable block carry a [surface] tag and sit in its own code block, one step at a time? If not, fix before sending.
 - Label manual vs Claude Code
+- Terse Claude Code output: tell Claude Code to report diff summary + commit hash + only the fields asked for, NOT full reasoning transcripts or long "things to know" essays (biggest avoidable context cost; drives premature handoffs). Surface a genuinely important detail specifically; otherwise stay terse.
 - Re-surface latest docs/files at session continuation
 - Doc handoff pattern: send doc → script to move it → verify
 
