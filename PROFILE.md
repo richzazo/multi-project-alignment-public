@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: May 30, 2026 (v1.14: added Lodestar — AI-native UHNW/RIA portfolio rebalancer + execution platform — to active projects and context lines).
+Last updated: May 30, 2026 (v1.15: added Aperture — client wealth portal for RIA/FO/MFO clients — to active projects and context lines).
 
 ---
 
@@ -129,12 +129,14 @@ He explicitly does NOT want a full "here's everything that's done, here's everyt
 | **Portfolio Intelligence** | personal 2 | desktop investment-ops dashboard (PI) | v16 in progress, React mockup heavy iteration |
 | **Z Sales Platform** | personal (migrated May 11) | sales platform | heavy-dev, Slack direct-fetch shipped May 12, production push next |
 | **Lodestar** | personal | standalone + embeddable UHNW/RIA portfolio rebalancer + execution (LS) | early-build — spec + comprehensive prototype |
+| **Aperture** | personal | client wealth portal — multi-advisor aggregation + action (AP) | early-build — PRD + canonical model + config-driven prototype v4 |
 
 ### Project relationships
 
 - **Capex Scout ↔ Portfolio Intelligence:** Two surfaces on one substrate (Capex Core). Discovery/conviction (CS, mobile) feeds Action/monitoring (PI, desktop). See `ALIGNMENT.md` in [capex-core-alignment-public](https://github.com/richzazo/capex-core-alignment-public) for full architecture.
 - **Z Sales Platform:** Independent product, no direct data overlap with CS or PI. Coordinated only on workflow/style/dev-environment level (this doc).
 - **Lodestar:** Independent product. Domain-adjacent to Portfolio Intelligence (both investment-ops) but no shared data or substrate — coordinated on workflow/style only, same posture as Z Sales. Has its own per-project spec/handoff docs in its project knowledge.
+- **Aperture:** Independent product — a client-facing wealth portal for RIA / family office / MFO clients (multi-advisor aggregation, entity-aware balance sheet, drill to tax lots/transactions, biometric money movement, bill pay, collaboration). Domain-adjacent to Lodestar (both wealth-tech, UHNW/RIA) and to Portfolio Intelligence (investment-ops), but no shared data or substrate with any of them — coordinated on workflow/style only. Possible future GTM adjacency with Lodestar and/or Z Sales — TBD.
 
 ### Account-to-Mac mapping
 
@@ -240,7 +242,7 @@ When Richard says any of these in any project chat, fetch the doc and re-anchor:
 
 Every project session should pull the doc once at start via the `get_profile` MCP tool. Silent if no changes since last fetch. One-line note if updated (include the version line).
 
-**Capex Scout and Portfolio Intelligence chats** also auto-fetch the CS↔PI alignment doc on session start (`https://raw.githubusercontent.com/richzazo/capex-core-alignment-public/main/ALIGNMENT.md`). Z Sales and Lodestar chats only fetch this profile doc; the CS↔PI alignment doc is not relevant to those projects.
+**Capex Scout and Portfolio Intelligence chats** also auto-fetch the CS↔PI alignment doc on session start (`https://raw.githubusercontent.com/richzazo/capex-core-alignment-public/main/ALIGNMENT.md`). Z Sales, Lodestar, and Aperture chats only fetch this profile doc; the CS↔PI alignment doc is not relevant to those projects.
 
 **Trigger phrases for the alignment doc** (CS and PI chats only):
 - `sync pi<>capex`
@@ -346,6 +348,14 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 - **Phase:** early-build (spec + architecture; comprehensive HTML prototype exists; deterministic-engine + canonical-model approach + AI-native layer scope locked)
 - **Mac required for:** dev work (stack TBD — leaning React/TS front end + pure-Python engine; no repo yet)
 - **Mobile-friendly tasks:** spec review, data-model + domain decisions, prototype/HTML review, roadmap calls
+- **Cross-project blockers:** none
+
+### Aperture
+- **Account:** personal
+- **Last active:** May 30, 2026
+- **Phase:** early-build (PRD + canonical data model drafted; config-driven React prototype at v4; no real integrations yet)
+- **Mac required for:** future Claude Code build (stack TBD — React web first, React Native portal app planned)
+- **Mobile-friendly tasks:** prototype review, data-model + entity-structure decisions, naming/brand, competitor-view review (Wealth Access et al.), spec refinement
 - **Cross-project blockers:** none
 
 ---
