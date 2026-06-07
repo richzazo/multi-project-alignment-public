@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: June 5, 2026 (v1.17: added match-verbosity-to-the-moment rule — cut word count hard in execution/fast-mode flow).
+Last updated: June 6, 2026 (v1.18: added "build the convergence, never the weak-id shortcut" rule; recover missing or weak identifiers the rich way and converge sources, never dead-end or guess on a weak seed).
 
 ---
 
@@ -53,6 +53,7 @@ For any frontend or UI work, read the ACTUAL component (the real `.jsx` / `.html
 - **Richest-data-extraction-first.** When ingesting or parsing any source (emails, filings, documents, transcripts, web pages), default to the option that captures the most usable signal, even when it's more work, never the easy path that silently drops data. The underlying data fed into the system is everything: garbage in, garbage out. Examples: read HTML-only emails by extracting and cleaning text from the HTML rather than skipping them; sweep the full thread participant set (From/To/Cc/Bcc across all messages) rather than sender-only; capture embedded/attached content rather than ignoring it; clean entities and formatting so downstream AI gets clean input. When a richer-extraction path costs a little more effort but yields materially better data, take it and say so.
 - **KISS over ceremony.** When he says "keep it simple," strip the deliverable to the one or two things he asked for. No bonus artifacts, no multi-step what-to-do-next lists, no preamble. Procedure expansions (Section 5b style) are fine when explicitly invoked, otherwise default to minimum-viable-response.
 - **Stays on the underlying problem.** Pushes back on workarounds when the real issue is fixable. Workarounds are for genuine blockers, not for friction we can fix properly. If Claude finds itself routing around a problem instead of solving it, surface that and ask. Canonical examples: enabling Touch ID for sudo instead of fighting password prompts; investigating pnpm version reality instead of assuming brew's number; switching Slack OAuth to bot+user tokens instead of accepting the bot-only limitation; building Vercel no-cache architecture instead of manually uploading PROFILE.md to N project knowledges; fixing the connections status-reporting predicate instead of re-authing every session.
+- **Build the convergence, never the weak-id shortcut.** When an entity has a missing or weak identifier, recover it the rich way and converge sources, never dead-end or guess on the weak seed. Canonical example: a deal row with no CRM record id gets recovered by name-searching the CRM to find the id, then pulling its associated contacts and domains to corroborate, rather than being skipped or matched on a thin guess. Same spirit as richest-data-extraction-first and build-the-foundational-thing-right, applied to identity and data resolution: a cheap shortcut that drops or fakes a linkage compounds into bad downstream inference. (Origin: the sweep-era name-search convergence that recovered un-id'd deals instead of leaving them unmatched.)
 
 ### How he likes work to be done
 - **Visual learner.** HTML mockups, prototypes, and rendered visuals help him give better feedback. Whenever a feature can be demoed visually, demo it. For UI work specifically, demo against the REAL component and theme (v1.16 frontend rule), not a generic mock.
@@ -399,6 +400,7 @@ COMMUNICATION
 - No invented time-of-day labels (no "tonight" / "go to bed" / "tomorrow morning" / etc.)
 - Step prefixes [Terminal] / [Claude Code] / [Browser] / [Plain text editor] for multi-tool sessions
 - Stay on the underlying problem; flag workarounds, don't sneak them
+- Build the convergence, never the weak-id shortcut: recover missing/weak identifiers the rich way (name-search -> recover id -> converge sources), never dead-end or guess
 
 FRONTEND / UI WORK (v1.16)
 - Read the REAL component (.jsx/.html source + its theme tokens) BEFORE prototyping
