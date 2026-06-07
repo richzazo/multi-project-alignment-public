@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: June 6, 2026 (v1.18: added "build the convergence, never the weak-id shortcut" rule; recover missing or weak identifiers the rich way and converge sources, never dead-end or guess on a weak seed).
+Last updated: June 7, 2026 (v1.20: added the two Macs' canonical local clone paths; added the **focus** trigger + a standing execution-mode-pacing line in every kickoff prompt, to stop verbosity creep in long chats. Builds on v1.19's Mac-naming + Capex Scout v7 refresh).
 
 ---
 
@@ -151,6 +151,11 @@ Mac runs **one Claude account at a time** for Claude Code dev work. Switching ac
 - Phone (Dispatch) can hit whichever account is active on Mac at that moment
 - Cross-account coordination is asynchronous (via shared docs in GitHub) — not real-time
 
+**The two Macs (named):**
+- **Zmac** — Richard's Main mac. A laptop he works from directly; doubles as his home desktop when home; travels with him. **Cockpit repo home** (`~/Desktop/capex-scout`, with the full `cockpit/` history). Primary hands-on machine.
+- **Zmac2** = hostname `ZMac2s-MacBook-Pro.local` (Apple Silicon, user `zmac`). A **stationary, always-on remote-access Mac** at home for multiple dev projects and remote phone dev. Reached via **Dispatch** (NOT the phone Code tab — that spins an ephemeral cloud container on the work-org account). **Must stay in sync with Zmac;** the durable fix is a GitHub remote on each repo (capex-scout had none as of v1.19).
+- **Canonical local clone paths on Zmac:** cockpit repo `~/Desktop/capex-scout`; this profile repo `~/Code/multi-project-alignment-public`. For any other repo, confirm the path with `find ~ -maxdepth 4 -type d -name <repo>` before `cd` — do not guess (a guessed `cd` that fails silently lets later commands run in the wrong repo).
+
 ---
 
 ## Section 3 — Cross-Project Coordination Rules
@@ -210,7 +215,7 @@ When a project chat is opened, **ask once at session start which device context 
 
 ### On phone driving a remote base laptop (v1.9)
 
-Richard runs an always-on home/base laptop he reaches from his phone while traveling. The travel laptop is the primary hands-on machine; the base is the remote target. Two remote paths into the base:
+Richard runs an always-on home/base laptop he reaches from his phone while traveling. **The travel laptop is Zmac (his Main mac); the always-on base is Zmac2 (`ZMac2s-MacBook-Pro.local`).** The travel laptop is the primary hands-on machine; the base is the remote target. Two remote paths into the base:
 - **Dispatch:** fire a whole task at the base from the phone (good for one-shot work, file ops, summaries).
 - **Code tab / Remote Control:** drive a live Claude Code session on the base for real back-and-forth dev (edit, commit, push from the phone, proven working).
 
@@ -233,6 +238,7 @@ MCP tool `get_profile` on the "Multi-Project Profile" custom connector at [https
 GitHub source of truth: [https://github.com/richzazo/multi-project-alignment-public/blob/main/PROFILE.md](https://github.com/richzazo/multi-project-alignment-public/blob/main/PROFILE.md). The MCP server reads from main on each call.
 
 ### Trigger phrases
+- **"focus"** (also **"tighten"** / **"one step"**) — hard reset to execution-mode pacing for the rest of the session: ONE action per message, a single copy-paste block + one line of why, no recaps, no multi-option framing, no preamble. Long chats drift verbose and break the paste-and-go flow; this is the operator's handle to clamp it back. Stay clamped until he signals strategy/depth mode (e.g. **"depth"**).
 
 When Richard says any of these in any project chat, fetch the doc and re-anchor:
 - "sync profile"
@@ -285,7 +291,7 @@ When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wra
 
 2. **Project Instructions block (ALWAYS, v1.10)** — a full, copy-paste-ready block for the project's settings → Instructions field, reflecting the current state (handoff doc reference bumped to the current chat-code, sync URLs, trigger phrases, hard rules, working-style highlights, phase context). This is produced EVERY time, as a paste-ready code block in chat, the same way the new-chat kickoff prompt is always produced. The operator should never have to ask for it. Bump the handoff-doc filename reference inside it to the current chat-code as part of the handoff.
 
-3. **New-chat kickoff prompt (ALWAYS)** — a copy-paste-ready first-message prompt for the next chat, inlined in chat as a code block.
+3. **New-chat kickoff prompt (ALWAYS)** — a copy-paste-ready first-message prompt for the next chat, inlined in chat as a code block. The kickoff prompt ALWAYS includes a standing pacing line: *default to execution-mode pacing — one step at a time, terse, copy-paste blocks; operator says "focus" to clamp verbosity, "depth" for strategy mode.*
 
 4. **Profile doc updates if needed — AND the profile-push process runs as part of handoff (clarified v1.16).** If anything material from this session belongs in the multi-project profile (new working-style preference, new device behavior, new format rule, new frontend rule), Claude proposes the change, and when confirmed produces the FULL updated `PROFILE.md` as a download PLUS the terminal push script (i.e. runs the Section 5b.2 profile-push process) as part of the same handoff, without waiting for a separate "push profile" command. "Run handoff" includes the profile-update process whenever there is a profile change; the operator should not have to remember to ask for it separately. (If there is NO profile change this session, skip — do not produce a no-op profile file.)
 
@@ -325,10 +331,11 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 
 ### Capex Scout
 - **Account:** personal
-- **Last active:** May 9, 2026
-- **Phase:** mid-build (real LLM, real EDGAR data, persistence shipped; Finnhub + theme ontology + provenance UI ahead)
-- **Mac required for:** Claude Code dev work (uv-based Python project at `~/Desktop/capex-scout`)
-- **Mobile-friendly tasks:** product design, theme/ontology decisions, prototype review, brief drafting
+- **Last active:** June 7, 2026
+- **Phase:** cockpit v7 locked (`cockpit/cockpit_v7.html`) — Reg-T buying-power engine (two ledgers: BP frees on the initial req 50%/100%, margin-call buffer on per-name maint), dry-powder reframe (headline = the free cash/withdrawal figure, stock BP shown separately), color-forward system (Bricolage hero numbers, state color, `--low` dark-orange dry-powder rule + its own capacity bar). The HTML is a stopgap; `build_v6_html.py` still emits the OLD engine. Latest handoff: `CapexScout_Handoff_cockpit-v7-bp-engine-and-color-system_p3n8w.md`.
+- **Next = dev mode:** wire a GitHub remote on `capex-scout` (none yet) + stand up the Zmac2 remote terminal so Zmac↔Zmac2 sync; backport v7 into the builder; real-Robinhood-sell BP calibration; then production frontend (React+TS+Vite+Tailwind, port `simulate()`→`engine.ts`) + Finnhub.
+- **Repo home:** Zmac (`~/Desktop/capex-scout`).
+- **Mobile-friendly tasks:** product design, color/UX review, prototype review, brief drafting
 - **Cross-project blockers:** none
 
 ### Portfolio Intelligence
