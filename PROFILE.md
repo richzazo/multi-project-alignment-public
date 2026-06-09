@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: June 7, 2026 (v1.20: added the two Macs' canonical local clone paths; added the **focus** trigger + a standing execution-mode-pacing line in every kickoff prompt, to stop verbosity creep in long chats. Builds on v1.19's Mac-naming + Capex Scout v7 refresh).
+Last updated: June 8, 2026 (v1.21: **Capex Scout + Portfolio Intelligence converged into one product, "The Desk"** — collapsed the two project entries into one, retired the CS↔PI two-surface framing, kept CS/PI as historical aliases. Builds on v1.20's Mac clone paths + **focus** trigger.).
 
 ---
 
@@ -130,18 +130,17 @@ He explicitly does NOT want a full "here's everything that's done, here's everyt
 
 | Project | Account | Surface | Status |
 |---|---|---|---|
-| **Capex Scout** | personal | mobile-first signals feed (CS) | mid-build, real LLM + EDGAR + SQLite live |
-| **Portfolio Intelligence** | personal 2 | desktop investment-ops dashboard (PI) | v16 in progress, React mockup heavy iteration |
+| **The Desk** (formerly Capex Scout + Portfolio Intelligence) | personal | unified AI-native portfolio ops on real book — Cockpit (risk/health) + Scout (research/suggestion) | mid-build, real agent brain + EDGAR + SQLite live, RH ingestion proven; wiring real-data layer |
 | **Z Sales Platform** | personal (migrated May 11) | sales platform | heavy-dev, call-log ingestion backbone proven live (h7q4n); breadth on remaining pipes + login next |
 | **Lodestar** | personal | standalone + embeddable UHNW/RIA portfolio rebalancer + execution (LS) | early-build — spec + comprehensive prototype |
 | **Aperture** | personal | client wealth portal — multi-advisor aggregation + action (AP) | early-build — PRD + canonical model + config-driven prototype v4 |
 
 ### Project relationships
 
-- **Capex Scout ↔ Portfolio Intelligence:** Two surfaces on one substrate (Capex Core). Discovery/conviction (CS, mobile) feeds Action/monitoring (PI, desktop). See `ALIGNMENT.md` in [capex-core-alignment-public](https://github.com/richzazo/capex-core-alignment-public) for full architecture.
+- **The Desk** (formerly **Capex Scout** + **Portfolio Intelligence**): now ONE product, one codebase. The old "two surfaces on one substrate, never merge codebases" framing is RETIRED — the split was operational (PI lived on a 2nd Claude account for parallel building), not architectural. Cockpit = risk/health view; Scout = research/suggestion arm; agents = specialist desks. "Capex Scout" and "Portfolio Intelligence" persist only as historical aliases. The `capex-core-alignment-public` ALIGNMENT.md (which describes CS↔PI as two products) is obsolete under The Desk — rewrite pending.
 - **Z Sales Platform:** Independent product, no direct data overlap with CS or PI. Coordinated only on workflow/style/dev-environment level (this doc).
-- **Lodestar:** Independent product. Domain-adjacent to Portfolio Intelligence (both investment-ops) but no shared data or substrate — coordinated on workflow/style only, same posture as Z Sales. Has its own per-project spec/handoff docs in its project knowledge.
-- **Aperture:** Independent product — a client-facing wealth portal for RIA / family office / MFO clients (multi-advisor aggregation, entity-aware balance sheet, drill to tax lots/transactions, biometric money movement, bill pay, collaboration). Domain-adjacent to Lodestar (both wealth-tech, UHNW/RIA) and to Portfolio Intelligence (investment-ops), but no shared data or substrate with any of them — coordinated on workflow/style only. Possible future GTM adjacency with Lodestar and/or Z Sales — TBD.
+- **Lodestar:** Independent product. Domain-adjacent to The Desk (both investment-ops) but no shared data or substrate — coordinated on workflow/style only, same posture as Z Sales. Has its own per-project spec/handoff docs in its project knowledge.
+- **Aperture:** Independent product — a client-facing wealth portal for RIA / family office / MFO clients (multi-advisor aggregation, entity-aware balance sheet, drill to tax lots/transactions, biometric money movement, bill pay, collaboration). Domain-adjacent to Lodestar (both wealth-tech, UHNW/RIA) and to The Desk (investment-ops), but no shared data or substrate with any of them — coordinated on workflow/style only. Possible future GTM adjacency with Lodestar and/or Z Sales — TBD.
 
 ### Account-to-Mac mapping
 
@@ -253,7 +252,7 @@ When Richard says any of these in any project chat, fetch the doc and re-anchor:
 
 Every project session should pull the doc once at start via the `get_profile` MCP tool. Silent if no changes since last fetch. One-line note if updated (include the version line).
 
-**Capex Scout and Portfolio Intelligence chats** also auto-fetch the CS↔PI alignment doc on session start (`https://raw.githubusercontent.com/richzazo/capex-core-alignment-public/main/ALIGNMENT.md`). Z Sales, Lodestar, and Aperture chats only fetch this profile doc; the CS↔PI alignment doc is not relevant to those projects.
+**The Desk chats** (formerly Capex Scout / Portfolio Intelligence) historically also auto-fetched the CS↔PI alignment doc (`https://raw.githubusercontent.com/richzazo/capex-core-alignment-public/main/ALIGNMENT.md`). That doc describes CS and PI as two separate products and is now **obsolete under The Desk** (rewrite pending) — treat as historical until rewritten. Z Sales, Lodestar, and Aperture chats only fetch this profile doc.
 
 **Trigger phrases for the alignment doc** (CS and PI chats only):
 - `sync pi<>capex`
@@ -329,21 +328,13 @@ Updated by Richard or any project Claude when something material changes. Goal: 
 
 Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT tracked here — they go stale within hours and don't drive coordination decisions.
 
-### Capex Scout
+### The Desk (formerly Capex Scout + Portfolio Intelligence)
 - **Account:** personal
-- **Last active:** June 7, 2026
-- **Phase:** cockpit v7 locked (`cockpit/cockpit_v7.html`) — Reg-T buying-power engine (two ledgers: BP frees on the initial req 50%/100%, margin-call buffer on per-name maint), dry-powder reframe (headline = the free cash/withdrawal figure, stock BP shown separately), color-forward system (Bricolage hero numbers, state color, `--low` dark-orange dry-powder rule + its own capacity bar). The HTML is a stopgap; `build_v6_html.py` still emits the OLD engine. Latest handoff: `CapexScout_Handoff_cockpit-v7-bp-engine-and-color-system_p3n8w.md`.
-- **Next = dev mode:** wire a GitHub remote on `capex-scout` (none yet) + stand up the Zmac2 remote terminal so Zmac↔Zmac2 sync; backport v7 into the builder; real-Robinhood-sell BP calibration; then production frontend (React+TS+Vite+Tailwind, port `simulate()`→`engine.ts`) + Finnhub.
-- **Repo home:** Zmac (`~/Desktop/capex-scout`).
-- **Mobile-friendly tasks:** product design, color/UX review, prototype review, brief drafting
-- **Cross-project blockers:** none
-
-### Portfolio Intelligence
-- **Account:** personal 2
-- **Last active:** May 9, 2026
-- **Phase:** mid-build (React mockup heavy iteration; backend extraction is v2.0)
-- **Mac required for:** none yet (still hardcoded mock data)
-- **Mobile-friendly tasks:** all current work — design, mockup review, decision capture
+- **Last active:** June 8, 2026
+- **Phase:** mid-build — unified product locked (Cockpit = risk/health view, Scout = research/suggestion arm, agents = specialist desks). Agent brain verified real/runnable/under-fed (only EDGAR is a live feed). Marks rail on `main`; RH ingestion seam proven live (real account/positions/options/margin pulled). Now wiring the real-data layer into the cockpit (DB snapshot tables + RH endpoints).
+- **Mac required for:** Claude Code dev at `~/Desktop/capex-scout` (repo rename to The Desk pending); robin_stocks login + RH pulls; backend/front build.
+- **Repo home:** Zmac (`~/Desktop/capex-scout`, private). Latest handoff: `TheDesk_Handoff_unified-vision-and-convergence_q4t8r.md`.
+- **Mobile-friendly tasks:** product design, color/UX review, prototype review, brief drafting, decision capture.
 - **Cross-project blockers:** none
 
 ### Z Sales Platform
