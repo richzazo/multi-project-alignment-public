@@ -4,7 +4,7 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: June 12, 2026 (v1.23: added **default to larger batched CC prompts** to the communication section — multi-seam, commit-at-each-seam, terse end report, over single-seam steps; reserve single-step pacing for hands-on execution or high-risk seams. Builds on v1.22's bias-to-build; origin: Z Sales arck8 + The Desk both moved materially faster under bigger batches than single-step pacing.).
+Last updated: June 14, 2026 (v1.24: corrected the Zmac2 canonical Desk repo path — it lives at `~/Desktop/capex-scout` (same as Zmac), NOT `~/Code/`; the prior `~/Code/` note was wrong for this repo and a silent failed `cd` would run commands in the wrong place. Also noted DB + `.env`/token are out-of-band and do not sync via git — migrate by AirDrop when flipping machines.).
 
 ---
 
@@ -155,8 +155,8 @@ Mac runs **one Claude account at a time** for Claude Code dev work. Switching ac
 
 **The two Macs (named):**
 - **Zmac** — Richard's Main mac. A laptop he works from directly; doubles as his home desktop when home; travels with him. **Cockpit repo home** (`~/Desktop/capex-scout`, with the full `cockpit/` history). Primary hands-on machine.
-- **Zmac2** = hostname `ZMac2s-MacBook-Pro.local` (Apple Silicon, user `zmac`). A **stationary, always-on remote-access Mac** at home for multiple dev projects and remote phone dev. Reached via **Dispatch** (NOT the phone Code tab — that spins an ephemeral cloud container on the work-org account). **Must stay in sync with Zmac;** the durable fix is a GitHub remote on each repo (capex-scout had none as of v1.19).
-- **Canonical local clone paths on Zmac:** cockpit repo `~/Desktop/capex-scout`; this profile repo `~/Code/multi-project-alignment-public`. For any other repo, confirm the path with `find ~ -maxdepth 4 -type d -name <repo>` before `cd` — do not guess (a guessed `cd` that fails silently lets later commands run in the wrong repo).
+- **Zmac2** = hostname `ZMac2s-MacBook-Pro.local` (Apple Silicon, user `zmac`). A **stationary, always-on remote-access Mac** at home for multiple dev projects and remote phone dev. Reached via **Dispatch** (NOT the phone Code tab — that spins an ephemeral cloud container on the work-org account). **The Desk repo on Zmac2 lives at `~/Desktop/capex-scout` (same path as Zmac), NOT `~/Code/`** — confirmed v1.24 (a prior note said `~/Code/`; that was wrong for this repo and a silent failed `cd` there would run later commands in the wrong place). **Must stay in sync with Zmac** via the GitHub remote (`git fetch origin && git reset --hard origin/main`). NOTE: code syncs via git, but **the DB (`data/capex_scout.db`) and secrets (`.env`, `~/.tokens/robinhood.pickle`) are gitignored / out-of-band and do NOT sync via git** — when flipping machines, migrate the DB by AirDrop (never `rm` it; ALTER + re-pull), and ensure `.env` + the RH token exist on the target machine before live work.
+- **Canonical local clone paths:** cockpit/Desk repo `~/Desktop/capex-scout` (BOTH Zmac and Zmac2); this profile repo `~/Code/multi-project-alignment-public` (Zmac). For any other repo, confirm the path with `find ~ -maxdepth 4 -type d -name <repo>` before `cd` — do not guess (a guessed `cd` that fails silently lets later commands run in the wrong repo).
 
 ---
 
@@ -428,6 +428,7 @@ DEVICE
 - Phone hard with: .md / .jsx / .html, render inline or push to GitHub
 - Phone needs all pasteable text (commands, prompts, PI blocks) inlined in chat as code blocks
 - Dispatch -> one host at a time, thin remote, one-shot tasks; Remote Control -> live dev session
+- Desk repo path is ~/Desktop/capex-scout on BOTH Zmac and Zmac2 (NOT ~/Code/, v1.24); DB + .env/token are out-of-band (don't sync via git) — AirDrop the DB when flipping machines, never rm it
 
 CRITICAL THINKING MODE
 - One question at a time
