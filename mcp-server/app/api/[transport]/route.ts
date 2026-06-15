@@ -12,17 +12,14 @@ const handler = createMcpHandler(
       },
       async () => {
         const r = await fetch(
-          'https://api.github.com/repos/richzazo/multi-project-alignment-public/contents/PROFILE.md?ref=main',
+          'https://raw.githubusercontent.com/richzazo/multi-project-alignment-public/main/PROFILE.md',
           {
-            headers: {
-              'Accept': 'application/vnd.github.v3.raw',
-              'User-Agent': 'rzazo-alignment-mcp/1.0',
-            },
+            headers: { 'User-Agent': 'rzazo-alignment-mcp/1.0' },
             cache: 'no-store',
           }
         );
         if (!r.ok) {
-          throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
+          throw new Error(`GitHub raw ${r.status}: ${await r.text()}`);
         }
         const text = await r.text();
         return { content: [{ type: 'text', text }] };
