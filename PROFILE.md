@@ -4,7 +4,9 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: June 19, 2026 (v1.26: added two cross-project working rules learned in a Z Sales session. (a) PLAN FOR PARALLELISM, CHECK TO AVOID CONFLICTS — gather feedback, plan batches/seams to run in parallel when possible, and check details up front to reduce merge conflicts (footprint-map-first, one worktree+branch per task, re-check after shared-file edits). (b) VERIFY PROD INFRA IS ACTUALLY WIRED, not just locally — "proven end-to-end" on a local dev server does not mean prod works. Both folded into Section 1 and the Quick Reference Card EXECUTION block.)
+Last updated: June 19, 2026 (v1.27: refreshed The Desk Section 6 context line — data layer rebuilt on FMP Ultimate (transcripts/guidance/backlog/13F + full financials now fill with real data, evidence-layer only so far), two-axis rating + tiered thresholds LOCKED, Phase 2 = wire FMP evidence into conviction/asym next; latest handoff k7v9m; last-active June 19. Corrected the stale SQLite-AirDrop note in Section 2 + Section 8: The Desk DB is now Neon Postgres (shared cloud, DB_BACKEND=neon), so there is NO DB to AirDrop when flipping machines — both Macs read the same cloud DB; only .env + the RH token are out-of-band.)
+
+Prior: v1.26 (June 19, 2026: added two cross-project working rules learned in a Z Sales session. (a) PLAN FOR PARALLELISM, CHECK TO AVOID CONFLICTS — gather feedback, plan batches/seams to run in parallel when possible, and check details up front to reduce merge conflicts (footprint-map-first, one worktree+branch per task, re-check after shared-file edits). (b) VERIFY PROD INFRA IS ACTUALLY WIRED, not just locally — "proven end-to-end" on a local dev server does not mean prod works. Both folded into Section 1 and the Quick Reference Card EXECUTION block.)
 
 Prior: v1.25 (June 14, 2026: consolidated the recurring over-explaining problem into ONE loud named lead rule — CONCISION IS THE DEFAULT, over-explaining is the #1 recurring failure across every chat — reinforced at the Quick Reference Card COMMUNICATION block + a pre-send concision check in the EXECUTION card; folded the teaching-mode lead-simple point in and reconciled with "teach as you go").
 
@@ -139,7 +141,7 @@ He explicitly does NOT want a full "here's everything that's done, here's everyt
 
 | Project | Account | Surface | Status |
 |---|---|---|---|
-| **The Desk** (formerly Capex Scout + Portfolio Intelligence) | personal | unified AI-native portfolio ops on real book — Cockpit (risk/health) + Scout (research/suggestion) | mid-build, real agent brain + EDGAR + SQLite live, RH ingestion proven; wiring real-data layer |
+| **The Desk** (formerly Capex Scout + Portfolio Intelligence) | personal | unified AI-native portfolio ops on real book — Cockpit (risk/health) + Scout (research/suggestion) | mid-build; two-axis rating + thresholds locked; FMP Ultimate data layer wired + filled (evidence-layer); live book report-only |
 | **Z Sales Platform** | personal (migrated May 11) | sales platform | heavy-dev, arc/membership spine + multi-user model U foundation in flight; Lucas login target Friday |
 | **Lodestar** | personal | standalone + embeddable UHNW/RIA portfolio rebalancer + execution (LS) | early-build — spec + comprehensive prototype |
 | **Aperture** | personal | client wealth portal — multi-advisor aggregation + action (AP) | early-build — PRD + canonical model + config-driven prototype v4 |
@@ -161,7 +163,7 @@ Mac runs **one Claude account at a time** for Claude Code dev work. Switching ac
 
 **The two Macs (named):**
 - **Zmac** — Richard's Main mac. A laptop he works from directly; doubles as his home desktop when home; travels with him. **Cockpit repo home** (`~/Desktop/capex-scout`, with the full `cockpit/` history). Primary hands-on machine.
-- **Zmac2** = hostname `ZMac2s-MacBook-Pro.local` (Apple Silicon, user `zmac`). A **stationary, always-on remote-access Mac** at home for multiple dev projects and remote phone dev. Reached via **Dispatch** (NOT the phone Code tab — that spins an ephemeral cloud container on the work-org account). **The Desk repo on Zmac2 lives at `~/Desktop/capex-scout` (same path as Zmac), NOT `~/Code/`** — confirmed v1.24 (a prior note said `~/Code/`; that was wrong for this repo and a silent failed `cd` there would run later commands in the wrong place). **Must stay in sync with Zmac** via the GitHub remote (`git fetch origin && git reset --hard origin/main`). NOTE: code syncs via git, but **the DB (`data/capex_scout.db`) and secrets (`.env`, `~/.tokens/robinhood.pickle`) are gitignored / out-of-band and do NOT sync via git** — when flipping machines, migrate the DB by AirDrop (never `rm` it; ALTER + re-pull), and ensure `.env` + the RH token exist on the target machine before live work.
+- **Zmac2** = hostname `ZMac2s-MacBook-Pro.local` (Apple Silicon, user `zmac`). A **stationary, always-on remote-access Mac** at home for multiple dev projects and remote phone dev. Reached via **Dispatch** or via **Remote Control** (`claude remote-control`, the live-session path — NOT a fresh phone Code-tab session, which spins an ephemeral cloud container on the work-org account). **The Desk repo on Zmac2 lives at `~/Desktop/capex-scout` (same path as Zmac), NOT `~/Code/`** — confirmed v1.24 (a prior note said `~/Code/`; that was wrong for this repo and a silent failed `cd` there would run later commands in the wrong place). **Must stay in sync with Zmac** via the GitHub remote (`git fetch origin && git reset --hard origin/main`). NOTE: code syncs via git, but **secrets (`.env`, `~/.tokens/robinhood.pickle`) are gitignored / out-of-band and do NOT sync via git** — ensure `.env` + the RH token exist on the target machine before live work. **The Desk DB is now Neon Postgres (shared cloud, `DB_BACKEND=neon`)**, so there is NO DB to AirDrop when flipping machines — both Macs read the same cloud DB (additive `ALTER` only, never drop/recreate; SQLite retained only as a fallback). (v1.27 corrects the prior SQLite-AirDrop note, which predated the Neon migration.)
 - **Canonical local clone paths:** cockpit/Desk repo `~/Desktop/capex-scout` (BOTH Zmac and Zmac2); this profile repo `~/Code/multi-project-alignment-public` (Zmac). For any other repo, confirm the path with `find ~ -maxdepth 4 -type d -name <repo>` before `cd` — do not guess (a guessed `cd` that fails silently lets later commands run in the wrong repo).
 
 ---
@@ -225,14 +227,15 @@ When a project chat is opened, **ask once at session start which device context 
 
 Richard runs an always-on home/base laptop he reaches from his phone while traveling. **The travel laptop is Zmac (his Main mac); the always-on base is Zmac2 (`ZMac2s-MacBook-Pro.local`).** The travel laptop is the primary hands-on machine; the base is the remote target. Two remote paths into the base:
 - **Dispatch:** fire a whole task at the base from the phone (good for one-shot work, file ops, summaries).
-- **Code tab / Remote Control:** drive a live Claude Code session on the base for real back-and-forth dev (edit, commit, push from the phone, proven working).
+- **Code tab / Remote Control:** drive a live Claude Code session on the base for real back-and-forth dev (edit, commit, push from the phone, proven working). Execution stays local on the base; the phone is just a window. Activate with `claude remote-control` (or `/remote-control`) on the base, then pick that session in the Claude app's Code tab (computer icon + green dot) — do NOT start a fresh phone session, which spins a cloud container instead of hitting the base.
 
 When a base laptop is set up and reachable, Mac-required tasks ARE available from the phone, because the base does the actual work; do not deprioritize dev tasks in that case. Without a reachable base, phone sessions fall back to the standard phone limits (no terminal/dev).
 
 Operating notes:
-- The base must stay awake, lid open, plugged in, with Claude Desktop and/or a `claude remote-control` session running.
+- The base must stay awake, lid open, plugged in, with Claude Desktop and/or a `claude remote-control` session running (wrap it in `caffeinate` so the base won't sleep while the session runs).
 - Dispatch pairs to one host at a time; the travel laptop must avoid the Dispatch tab or it steals the host slot.
 - A `claude remote-control` session ends if its terminal closes or the network is unreachable for roughly 10 minutes; someone at home may need to restart it.
+- Trust git state from actual terminal commands, not the phone Code-tab summary (it has fabricated commit/sync state before).
 - Editing config/keys remotely means directing the session to edit the file, not opening an editor on the base screen. Secret values typed this way travel through the chat.
 
 ---
@@ -339,12 +342,13 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 
 ### The Desk (formerly Capex Scout + Portfolio Intelligence)
 - **Account:** personal
-- **Last active:** June 8, 2026
-- **Phase:** mid-build — unified product locked (Cockpit = risk/health view, Scout = research/suggestion arm, agents = specialist desks). Agent brain verified real/runnable/under-fed (only EDGAR is a live feed). Marks rail on `main`; RH ingestion seam proven live (real account/positions/options/margin pulled). Now wiring the real-data layer into the cockpit (DB snapshot tables + RH endpoints).
-- **Mac required for:** Claude Code dev at `~/Desktop/capex-scout` (repo rename to The Desk pending); robin_stocks login + RH pulls; backend/front build.
-- **Repo home:** Zmac (`~/Desktop/capex-scout`, private). Latest handoff: `TheDesk_Handoff_unified-vision-and-convergence_q4t8r.md`.
-- **Mobile-friendly tasks:** product design, color/UX review, prototype review, brief drafting, decision capture.
+- **Last active:** June 19, 2026
+- **Phase:** mid-build — unified product locked (Cockpit = risk/health, Scout = research/suggestion, agents = specialist desks). Two-axis verdict model (rating + action) + tiered rating thresholds LOCKED. Data layer rebuilt on **FMP Ultimate** (monthly trial): transcripts/guidance/backlog/13F + full financials fill with real data, zero fallbacks, FMP-primary w/ yfinance/Finnhub fallback + provenance/as-of stamps. DCF Phase-1 (zero-LLM math) proven on AAOI. FMP evidence is EVIDENCE-LAYER ONLY so far — NOT yet feeding conviction/rating/asym. Live 145-name book UNTOUCHED (report-only). DB = Neon (shared cloud).
+- **Mac required for:** Claude Code dev at `~/Desktop/capex-scout` (repo rename to The Desk pending); robin_stocks login + RH pulls; backend/front build. NOTE: with Zmac2 reachable via Remote Control, this dev is also phone-runnable.
+- **Repo home:** `~/Desktop/capex-scout` on BOTH Zmac + Zmac2 (private). Latest handoff: `TheDesk_Handoff_fmp-ultimate-foundation-and-fill_k7v9m.md`.
+- **Mobile-friendly tasks:** product design, color/UX review, prototype review, brief drafting, decision capture; Phase-2 builds via Remote Control on Zmac2.
 - **Cross-project blockers:** none
+- **Next build:** Phase 2 — wire FMP evidence into conviction/asym (guidance→logged thesis-pillar re-assessment; DCF Phase-2 bounded-LLM growth→asym; 13F→Scout smart-money signal, evidence-only, never rating), then eyes-open live 145-book re-score.
 
 ### Z Sales Platform
 - **Account:** personal (migrated from work-org on May 11)
@@ -435,11 +439,11 @@ DEVICE
 - Ask device context at session start: Mac / phone alone / phone driving a remote base
 - Mac -> dev-ready options first, longer responses okay (but still terse in active build flow, v1.17, and lead concise per v1.25)
 - Phone alone -> tight, mobile-suited tasks
-- Phone + remote base -> Mac-required dev IS available via Dispatch/Code; don't deprioritize dev
+- Phone + remote base -> Mac-required dev IS available via Dispatch/Remote Control; don't deprioritize dev
 - Phone hard with: .md / .jsx / .html, render inline or push to GitHub
 - Phone needs all pasteable text (commands, prompts, PI blocks) inlined in chat as code blocks
-- Dispatch -> one host at a time, thin remote, one-shot tasks; Remote Control -> live dev session
-- Desk repo path is ~/Desktop/capex-scout on BOTH Zmac and Zmac2 (NOT ~/Code/, v1.24); DB + .env/token are out-of-band (don't sync via git) — AirDrop the DB when flipping machines, never rm it
+- Dispatch -> one host at a time, thin remote, one-shot tasks; Remote Control (claude remote-control) -> live dev session on the base, pick the base session in the Code tab (not a fresh phone session); trust git state from real commands, not the Code-tab summary
+- Desk repo path is ~/Desktop/capex-scout on BOTH Zmac and Zmac2 (NOT ~/Code/, v1.24); .env + RH token are out-of-band (don't sync via git); Desk DB = Neon (shared cloud, DB_BACKEND=neon) so NO DB AirDrop when flipping machines — both Macs read the same cloud DB, additive ALTER only, never drop (v1.27; SQLite is fallback only)
 
 CRITICAL THINKING MODE
 - One question at a time
