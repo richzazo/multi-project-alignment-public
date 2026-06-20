@@ -4,11 +4,11 @@
 
 This doc lives above all per-project alignment docs. If anything in this doc conflicts with a per-project doc on workflow/style, this doc wins. Per-project docs win on substance specific to their domain.
 
-Last updated: June 19, 2026 (v1.27: refreshed The Desk Section 6 context line — data layer rebuilt on FMP Ultimate (transcripts/guidance/backlog/13F + full financials now fill with real data, evidence-layer only so far), two-axis rating + tiered thresholds LOCKED, Phase 2 = wire FMP evidence into conviction/asym next; latest handoff k7v9m; last-active June 19. Corrected the stale SQLite-AirDrop note in Section 2 + Section 8: The Desk DB is now Neon Postgres (shared cloud, DB_BACKEND=neon), so there is NO DB to AirDrop when flipping machines — both Macs read the same cloud DB; only .env + the RH token are out-of-band.)
+Last updated: June 19, 2026 (v1.27: added Section 5c Project Bible — a per-project durable source-of-truth doc on the same propose-in-session / apply-at-handoff cadence as the profile; reoriented Section 5b so new chats read profile AND bible at start and handoffs write bible deltas; bumped the Quick Reference Card SESSION START block.)
 
 Prior: v1.26 (June 19, 2026: added two cross-project working rules learned in a Z Sales session. (a) PLAN FOR PARALLELISM, CHECK TO AVOID CONFLICTS — gather feedback, plan batches/seams to run in parallel when possible, and check details up front to reduce merge conflicts (footprint-map-first, one worktree+branch per task, re-check after shared-file edits). (b) VERIFY PROD INFRA IS ACTUALLY WIRED, not just locally — "proven end-to-end" on a local dev server does not mean prod works. Both folded into Section 1 and the Quick Reference Card EXECUTION block.)
 
-Prior: v1.25 (June 14, 2026: consolidated the recurring over-explaining problem into ONE loud named lead rule — CONCISION IS THE DEFAULT, over-explaining is the #1 recurring failure across every chat — reinforced at the Quick Reference Card COMMUNICATION block + a pre-send concision check in the EXECUTION card; folded the teaching-mode lead-simple point in and reconciled with "teach as you go").
+Prior: v1.25 (June 14, 2026: consolidated the recurring over-explaining problem into ONE loud named lead rule — CONCISION IS THE DEFAULT, over-explaining is the #1 recurring failure across every chat — reinforced at the Quick Reference Card COMMUNICATION block + a pre-send concision check in the EXECUTION card; folded the teaching-mode lead-simple point in and reconciled with "teach as you go".)
 
 ---
 
@@ -86,6 +86,7 @@ For any frontend or UI work, read the ACTUAL component (the real `.jsx` / `.html
 Consistent across all projects. Updated in v1.8.
 
 - **Handoff docs:** `<Project>_Handoff_<topic-slug>_<chat-code>.md`. Topic-slug is a short kebab-case descriptor of what the session shipped (e.g. `slack-direct-fetch-shipped`, `mcp-server-build`, `theme-ontology-locked`). Chat-code is the 5-character alphanumeric session ID generated at session start (see "Chat-code at session start" below). Examples: `ZSales_Handoff_slack-direct-fetch-shipped_x7k4m.md`, `CapexScout_Handoff_theme-ontology-locked_8t3jw.md`. No spaces, no dashes inside the project name.
+- **Project Bible docs:** `<Project>_ProjectBible_<chat-code>.md` (see Section 5c).
 - **Project knowledge folder for superseded handoff docs:** `/history/` inside project knowledge. Old addendums and prior handoff versions move here when a new consolidated doc lands. They stop being read as live context.
 - **Profile doc version line:** `Last updated: <Month Day, Year> (v<X.Y> — <one-line change summary>).` Bump minor for section updates, major for rewrites.
 - **Per-project alignment docs:** `ALIGNMENT.md` in the project's public alignment repo. Example: `capex-core-alignment-public/ALIGNMENT.md`.
@@ -141,7 +142,7 @@ He explicitly does NOT want a full "here's everything that's done, here's everyt
 
 | Project | Account | Surface | Status |
 |---|---|---|---|
-| **The Desk** (formerly Capex Scout + Portfolio Intelligence) | personal | unified AI-native portfolio ops on real book — Cockpit (risk/health) + Scout (research/suggestion) | mid-build; two-axis rating + thresholds locked; FMP Ultimate data layer wired + filled (evidence-layer); live book report-only |
+| **The Desk** (formerly Capex Scout + Portfolio Intelligence) | personal | unified AI-native portfolio ops on real book — Cockpit (risk/health) + Scout (research/suggestion) | mid-build, real agent brain + EDGAR + SQLite live, RH ingestion proven; wiring real-data layer |
 | **Z Sales Platform** | personal (migrated May 11) | sales platform | heavy-dev, arc/membership spine + multi-user model U foundation in flight; Lucas login target Friday |
 | **Lodestar** | personal | standalone + embeddable UHNW/RIA portfolio rebalancer + execution (LS) | early-build — spec + comprehensive prototype |
 | **Aperture** | personal | client wealth portal — multi-advisor aggregation + action (AP) | early-build — PRD + canonical model + config-driven prototype v4 |
@@ -163,7 +164,7 @@ Mac runs **one Claude account at a time** for Claude Code dev work. Switching ac
 
 **The two Macs (named):**
 - **Zmac** — Richard's Main mac. A laptop he works from directly; doubles as his home desktop when home; travels with him. **Cockpit repo home** (`~/Desktop/capex-scout`, with the full `cockpit/` history). Primary hands-on machine.
-- **Zmac2** = hostname `ZMac2s-MacBook-Pro.local` (Apple Silicon, user `zmac`). A **stationary, always-on remote-access Mac** at home for multiple dev projects and remote phone dev. Reached via **Dispatch** or via **Remote Control** (`claude remote-control`, the live-session path — NOT a fresh phone Code-tab session, which spins an ephemeral cloud container on the work-org account). **The Desk repo on Zmac2 lives at `~/Desktop/capex-scout` (same path as Zmac), NOT `~/Code/`** — confirmed v1.24 (a prior note said `~/Code/`; that was wrong for this repo and a silent failed `cd` there would run later commands in the wrong place). **Must stay in sync with Zmac** via the GitHub remote (`git fetch origin && git reset --hard origin/main`). NOTE: code syncs via git, but **secrets (`.env`, `~/.tokens/robinhood.pickle`) are gitignored / out-of-band and do NOT sync via git** — ensure `.env` + the RH token exist on the target machine before live work. **The Desk DB is now Neon Postgres (shared cloud, `DB_BACKEND=neon`)**, so there is NO DB to AirDrop when flipping machines — both Macs read the same cloud DB (additive `ALTER` only, never drop/recreate; SQLite retained only as a fallback). (v1.27 corrects the prior SQLite-AirDrop note, which predated the Neon migration.)
+- **Zmac2** = hostname `ZMac2s-MacBook-Pro.local` (Apple Silicon, user `zmac`). A **stationary, always-on remote-access Mac** at home for multiple dev projects and remote phone dev. Reached via **Dispatch** (NOT the phone Code tab — that spins an ephemeral cloud container on the work-org account). **The Desk repo on Zmac2 lives at `~/Desktop/capex-scout` (same path as Zmac), NOT `~/Code/`** — confirmed v1.24 (a prior note said `~/Code/`; that was wrong for this repo and a silent failed `cd` there would run later commands in the wrong place). **Must stay in sync with Zmac** via the GitHub remote (`git fetch origin && git reset --hard origin/main`). NOTE: code syncs via git, but **the DB (`data/capex_scout.db`) and secrets (`.env`, `~/.tokens/robinhood.pickle`) are gitignored / out-of-band and do NOT sync via git** — when flipping machines, migrate the DB by AirDrop (never `rm` it; ALTER + re-pull), and ensure `.env` + the RH token exist on the target machine before live work.
 - **Canonical local clone paths:** cockpit/Desk repo `~/Desktop/capex-scout` (BOTH Zmac and Zmac2); this profile repo `~/Code/multi-project-alignment-public` (Zmac). For any other repo, confirm the path with `find ~ -maxdepth 4 -type d -name <repo>` before `cd` — do not guess (a guessed `cd` that fails silently lets later commands run in the wrong repo).
 
 ---
@@ -177,7 +178,7 @@ Mac runs **one Claude account at a time** for Claude Code dev work. Switching ac
 - **API credit usage tracking** — Anthropic API credits are shared across projects when run from the same account. Each project should be aware of recent burn rate so they don't surprise-empty the budget
 - **Async-task suggestion when operator is in flow on another project** — if CS is actively shipping, PI's Claude should suggest review / brain-dump / decision tasks only, not new dev work
 - **Git commit / version awareness as environment context** — each project's Claude knows when its repo was last touched and the current commit hash. Useful for "is this stale?" decisions and version cross-reference between projects. **Never** for cross-code reading or copying logic between repos.
-- **Shared workflow vocabulary glossary** — handoff, sync, recap, brief, prompt, alignment, profile, etc. Workflow words should mean the same thing across all projects. Domain words (themes, signals, baskets, positions, deals, leads) stay project-local and ARE NOT shared in this glossary.
+- **Shared workflow vocabulary glossary** — handoff, sync, recap, brief, prompt, alignment, profile, bible, etc. Workflow words should mean the same thing across all projects. Domain words (themes, signals, baskets, positions, deals, leads) stay project-local and ARE NOT shared in this glossary.
 - **Handoff timing** — when migrating heavy dev work to a different account/Mac, projects should help each other prep clean handoff docs
 - **Visual asset surfacing** — latest HTML/mockups/PDFs across projects should be easy to re-surface
 - **File and version naming conventions** — Section 1 names the patterns; all projects follow them.
@@ -189,6 +190,7 @@ Mac runs **one Claude account at a time** for Claude Code dev work. Switching ac
 - **Domain logic** — CS's signal scoring and PI's portfolio math are independent; Z Sales is its own world
 - **Decisions internal to one product** — design choices, feature scope, API shape stay project-local
 - **Domain vocabulary** — "themes," "signals," "baskets" mean specific things in CS/PI and should not be casually applied in Z Sales
+- **Project Bibles** — each project's Bible is its own; never cross-read or merge content between project Bibles.
 
 ### How coordination happens
 
@@ -227,15 +229,14 @@ When a project chat is opened, **ask once at session start which device context 
 
 Richard runs an always-on home/base laptop he reaches from his phone while traveling. **The travel laptop is Zmac (his Main mac); the always-on base is Zmac2 (`ZMac2s-MacBook-Pro.local`).** The travel laptop is the primary hands-on machine; the base is the remote target. Two remote paths into the base:
 - **Dispatch:** fire a whole task at the base from the phone (good for one-shot work, file ops, summaries).
-- **Code tab / Remote Control:** drive a live Claude Code session on the base for real back-and-forth dev (edit, commit, push from the phone, proven working). Execution stays local on the base; the phone is just a window. Activate with `claude remote-control` (or `/remote-control`) on the base, then pick that session in the Claude app's Code tab (computer icon + green dot) — do NOT start a fresh phone session, which spins a cloud container instead of hitting the base.
+- **Code tab / Remote Control:** drive a live Claude Code session on the base for real back-and-forth dev (edit, commit, push from the phone, proven working).
 
 When a base laptop is set up and reachable, Mac-required tasks ARE available from the phone, because the base does the actual work; do not deprioritize dev tasks in that case. Without a reachable base, phone sessions fall back to the standard phone limits (no terminal/dev).
 
 Operating notes:
-- The base must stay awake, lid open, plugged in, with Claude Desktop and/or a `claude remote-control` session running (wrap it in `caffeinate` so the base won't sleep while the session runs).
+- The base must stay awake, lid open, plugged in, with Claude Desktop and/or a `claude remote-control` session running.
 - Dispatch pairs to one host at a time; the travel laptop must avoid the Dispatch tab or it steals the host slot.
 - A `claude remote-control` session ends if its terminal closes or the network is unreachable for roughly 10 minutes; someone at home may need to restart it.
-- Trust git state from actual terminal commands, not the phone Code-tab summary (it has fabricated commit/sync state before).
 - Editing config/keys remotely means directing the session to edit the file, not opening an editor on the base screen. Secret values typed this way travel through the chat.
 
 ---
@@ -262,9 +263,9 @@ When Richard says any of these in any project chat, fetch the doc and re-anchor:
 
 ### Auto-fetch on session start
 
-Every project session should pull the doc once at start via the `get_profile` MCP tool. Silent if no changes since last fetch. One-line note if updated (include the version line).
+Every project session should pull the doc once at start via the `get_profile` MCP tool. Silent if no changes since last fetch. One-line note if updated (include the version line). **Then read that project's Project Bible (Section 5c), then the latest handoff doc.** Profile + Bible are the two standing-context reads at session start; the handoff supplies the session-delta state on top.
 
-**The Desk chats** (formerly Capex Scout / Portfolio Intelligence) historically also auto-fetched the CS↔PI alignment doc (`https://raw.githubusercontent.com/richzazo/capex-core-alignment-public/main/ALIGNMENT.md`). That doc describes CS and PI as two separate products and is now **obsolete under The Desk** (rewrite pending) — treat as historical until rewritten. Z Sales, Lodestar, and Aperture chats only fetch this profile doc.
+**The Desk chats** (formerly Capex Scout / Portfolio Intelligence) historically also auto-fetched the CS↔PI alignment doc (`https://raw.githubusercontent.com/richzazo/capex-core-alignment-public/main/ALIGNMENT.md`). That doc describes CS and PI as two separate products and is now **obsolete under The Desk** (rewrite pending) — treat as historical until rewritten. Z Sales, Lodestar, and Aperture chats only fetch this profile doc (plus their own Project Bible from project knowledge).
 
 **Trigger phrases for the alignment doc** (CS and PI chats only):
 - `sync pi<>capex`
@@ -300,19 +301,21 @@ When Richard says **"handoff prep"** (or "prep handoff" / "build handoff" / "wra
 
 1. **Comprehensive handoff doc** — full state-of-project markdown covering: what is, where it is now (shipped, validated, known issues, in-flight), canonical reference URLs, file layout, how-to-run, locked architectural decisions, open questions, what to do first in the next chat, what NOT to do, the first-message prompt for the new chat. Format mirrors the working `<Project>_Handoff_<topic-slug>_<chat-code>.md` naming convention (Section 1). The chat-code carries over from the chat-code generated at session start. Before producing it, re-walk the ENTIRE chat and capture every substantive item — brain-dumps, decisions, side-tangents, scope-expansion ideas, parked features — routed into its correct section, not just what was coded. Check each item against the existing doc and add/update every applicable area. A handoff that captures only the code delta is incomplete.
 
-2. **Project Instructions block (ALWAYS, v1.10)** — a full, copy-paste-ready block for the project's settings → Instructions field, reflecting the current state (handoff doc reference bumped to the current chat-code, sync URLs, trigger phrases, hard rules, working-style highlights, phase context). This is produced EVERY time, as a paste-ready code block in chat, the same way the new-chat kickoff prompt is always produced. The operator should never have to ask for it. Bump the handoff-doc filename reference inside it to the current chat-code as part of the handoff.
+1b. **Project Bible deltas (when there are any).** If this session discovered new durable substance for the Project Bible (Section 5c) — a locked decision, an architecture/vocabulary change, a new learning, a backlog or parked item, a commercialization move — the handoff PROPOSES those bible additions/edits, gets Richard's confirmation, and WRITES the updated Bible in place as part of the package (download + the move/push script), the same way it handles profile changes. Additive by default; never thin or relitigate existing Bible sections. If there are no bible deltas this session, skip — do not produce a no-op Bible.
 
-3. **New-chat kickoff prompt (ALWAYS)** — a copy-paste-ready first-message prompt for the next chat, inlined in chat as a code block. The kickoff prompt ALWAYS includes a standing pacing line: *default to execution-mode pacing — one step at a time, terse, copy-paste blocks; operator says "focus" to clamp verbosity, "depth" for strategy mode.*
+2. **Project Instructions block (ALWAYS, v1.10)** — a full, copy-paste-ready block for the project's settings → Instructions field, reflecting the current state (handoff doc reference bumped to the current chat-code, Project Bible reference, sync URLs, trigger phrases, hard rules, working-style highlights, phase context). This is produced EVERY time, as a paste-ready code block in chat, the same way the new-chat kickoff prompt is always produced. The operator should never have to ask for it. Bump the handoff-doc filename reference (and the Bible filename if it changed) inside it to the current chat-code as part of the handoff.
+
+3. **New-chat kickoff prompt (ALWAYS)** — a copy-paste-ready first-message prompt for the next chat, inlined in chat as a code block. It directs the next chat to read the profile (`get_profile`) AND the project Bible AND the latest handoff at session start, and **names the Bible doc explicitly**. The kickoff prompt ALWAYS includes a standing pacing line: *default to execution-mode pacing — one step at a time, terse, copy-paste blocks; operator says "focus" to clamp verbosity, "depth" for strategy mode.*
 
 4. **Profile doc updates if needed — AND the profile-push process runs as part of handoff (clarified v1.16).** If anything material from this session belongs in the multi-project profile (new working-style preference, new device behavior, new format rule, new frontend rule), Claude proposes the change, and when confirmed produces the FULL updated `PROFILE.md` as a download PLUS the terminal push script (i.e. runs the Section 5b.2 profile-push process) as part of the same handoff, without waiting for a separate "push profile" command. "Run handoff" includes the profile-update process whenever there is a profile change; the operator should not have to remember to ask for it separately. (If there is NO profile change this session, skip — do not produce a no-op profile file.)
 
 5. **Alignment doc updates if needed** — for CS or PI chats only: if anything from this session affects the cross-product substrate (new locked decision, schema change, vocabulary change), Claude proposes the alignment doc update before pushing.
 
-6. **Download + push terminal scripts** — copy-paste-ready bash scripts for moving the doc from `~/Downloads` into the right repo folder, then `git add / commit / push` to GitHub. **No inline comments in pasteable bash blocks** (Section 1 communication rule); explanation goes in prose around the block.
+6. **Download + push terminal scripts** — copy-paste-ready bash scripts for moving the doc(s) from `~/Downloads` into the right repo folder, then `git add / commit / push` to GitHub. **No inline comments in pasteable bash blocks** (Section 1 communication rule); explanation goes in prose around the block.
 
-The chat does all of this without further prompting after the trigger phrase. Only pauses for confirmation on profile or alignment doc changes (since those affect other projects).
+The chat does all of this without further prompting after the trigger phrase. Only pauses for confirmation on profile, alignment, or Project Bible changes (since those are durable cross-session artifacts).
 
-**Profile and alignment doc changes are applied at the END of a chat via the handoff protocol — proposed in-session, pushed at handoff. Never push a profile/alignment change mid-session.**
+**Profile, alignment, and Project Bible changes are applied at the END of a chat via the handoff protocol — proposed in-session, written/pushed at handoff. Never push a profile/alignment change, or write a Bible change, mid-session.**
 
 ### Section 5b.2 — Profile push
 
@@ -322,7 +325,15 @@ When Richard says **"update profile"** / **"push profile"** (or as part of a han
 
 When Richard says **"update project instructions"**, output the full Project Instructions block as a single paste-ready code block for the project settings → Instructions field (full replacement, not a diff). This is the same block produced in step 2 of the handoff procedure.
 
-**Critical scope distinction.** PROFILE.md (this doc) and per-project handoff docs are SEPARATE artifacts with separate update cycles. PROFILE.md is cross-project workflow alignment (lives in `multi-project-alignment-public` repo). Per-project handoff docs are project-specific state captures (live in each project's repo + project knowledge). When updating one, do NOT update or version the other unless changes genuinely affect both. Don't conflate their version numbers, filenames, or content.
+### Section 5c — Project Bible (per-project canonical doc)
+
+A **Project Bible** is a per-project, comprehensive, durable source-of-truth doc (product vision/principles, locked architecture, locked vocabulary, critical learnings, current build state, full backlog, parked ideas, commercialization lanes, contacts/deals, dev env, working method). Unlike the handoff doc (session-delta state), it is meant **NEVER to shed** — it is the fat record the thinning handoff doc kept losing. It is a per-project artifact (lives in the project repo + project knowledge), separate from PROFILE.md and from the handoff doc, with its own update cycle. Naming: `<Project>_ProjectBible_<chat-code>.md`.
+
+**Update discipline (same cadence as the profile):** a chat that discovers new substance — a locked decision, an architecture/vocabulary change, a new learning, a backlog or parked item, a commercialization move — **proposes the bible change/addition in-session and confirms it before writing**, then applies it **at handoff** (never mid-session, same rule as profile/alignment changes). Updated in place, folded into the right section. **Additive by default; only correct what is actually wrong — do not thin or relitigate existing sections.**
+
+**Session-start read:** new chats reorient to BOTH the profile AND the Project Bible — `get_profile`, then read the Bible, then the latest handoff (Section 5, Auto-fetch). The kickoff prompt names the Bible doc explicitly.
+
+**Critical scope distinction.** PROFILE.md (this doc), per-project Project Bibles, and per-project handoff docs are SEPARATE artifacts with separate update cycles. PROFILE.md is cross-project workflow alignment (lives in `multi-project-alignment-public`). A Project Bible is per-project durable substance (project repo + project knowledge). A handoff doc is per-project session-delta state. When updating one, do NOT update or version the others unless changes genuinely affect them. Don't conflate their version numbers, filenames, or content.
 
 ---
 
@@ -342,20 +353,19 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 
 ### The Desk (formerly Capex Scout + Portfolio Intelligence)
 - **Account:** personal
-- **Last active:** June 19, 2026
-- **Phase:** mid-build — unified product locked (Cockpit = risk/health, Scout = research/suggestion, agents = specialist desks). Two-axis verdict model (rating + action) + tiered rating thresholds LOCKED. Data layer rebuilt on **FMP Ultimate** (monthly trial): transcripts/guidance/backlog/13F + full financials fill with real data, zero fallbacks, FMP-primary w/ yfinance/Finnhub fallback + provenance/as-of stamps. DCF Phase-1 (zero-LLM math) proven on AAOI. FMP evidence is EVIDENCE-LAYER ONLY so far — NOT yet feeding conviction/rating/asym. Live 145-name book UNTOUCHED (report-only). DB = Neon (shared cloud).
-- **Mac required for:** Claude Code dev at `~/Desktop/capex-scout` (repo rename to The Desk pending); robin_stocks login + RH pulls; backend/front build. NOTE: with Zmac2 reachable via Remote Control, this dev is also phone-runnable.
-- **Repo home:** `~/Desktop/capex-scout` on BOTH Zmac + Zmac2 (private). Latest handoff: `TheDesk_Handoff_fmp-ultimate-foundation-and-fill_k7v9m.md`.
-- **Mobile-friendly tasks:** product design, color/UX review, prototype review, brief drafting, decision capture; Phase-2 builds via Remote Control on Zmac2.
+- **Last active:** June 8, 2026
+- **Phase:** mid-build — unified product locked (Cockpit = risk/health view, Scout = research/suggestion arm, agents = specialist desks). Agent brain verified real/runnable/under-fed (only EDGAR is a live feed). Marks rail on `main`; RH ingestion seam proven live (real account/positions/options/margin pulled). Now wiring the real-data layer into the cockpit (DB snapshot tables + RH endpoints).
+- **Mac required for:** Claude Code dev at `~/Desktop/capex-scout` (repo rename to The Desk pending); robin_stocks login + RH pulls; backend/front build.
+- **Repo home:** Zmac (`~/Desktop/capex-scout`, private). Latest handoff: `TheDesk_Handoff_unified-vision-and-convergence_q4t8r.md`.
+- **Mobile-friendly tasks:** product design, color/UX review, prototype review, brief drafting, decision capture.
 - **Cross-project blockers:** none
-- **Next build:** Phase 2 — wire FMP evidence into conviction/asym (guidance→logged thesis-pillar re-assessment; DCF Phase-2 bounded-LLM growth→asym; 13F→Scout smart-money signal, evidence-only, never rating), then eyes-open live 145-book re-score.
 
 ### Z Sales Platform
 - **Account:** personal (migrated from work-org on May 11)
-- **Last active:** June 14, 2026
-- **Phase:** mid-build pushing toward production; Review queue is now reviewable (batched reads + render cases + pagination shipped); resolver fixed via precedence inversion; ThroughlineAI Google tenancy migrated on the local side (new Cloud project throughlineai-app, OAuth clients, creds swapped, gmail axis live); a six-seam overnight batch (usage meter + synthesis output fix + status honesty + stage-progress + domain-health 500) landing async. Latest handoff: `ZSales_Handoff_review-rebuild-tenancy-migration-synth-batch_k4m7v.md`.
+- **Last active:** June 19, 2026
+- **Phase:** mid-build pushing toward production. Bluedot ingest (B0.5/B0.5d) + prod Inngest rail (F70) live; B1 (quick wins) on main + B8 (recent emails) in a worktree, both end reports pending. Parallel-worktree dev method in use. Canonical durable doc: `ZSales_ProjectBible_v8k3m.md`. Latest handoff: `ZSales_Handoff_project-bible-rebuild_v8k3m.md`. Live companion build spec: `ZSales_QA-Feedback-and-Batch-Seams_k7r9m.md`.
 - **Mac required for:** Claude Code dev work on Next.js / pnpm project at `~/Code/z-sales-platform/`
-- **Mobile-friendly tasks:** handoff doc review, deal-card schema review, decision capture, prompt drafting for Mac sessions, voice calibration on email drafts, UI/UX prototype review
+- **Mobile-friendly tasks:** handoff/bible review, deal-card schema review, decision capture, prompt drafting for Mac sessions, voice calibration on email drafts, UI/UX prototype review
 - **Cross-project blockers:** none
 
 ### Lodestar
@@ -381,8 +391,8 @@ Per-feature versions, per-commit hashes, per-day API spend are intentionally NOT
 Tracked here so no project Claude invents answers:
 
 - **Cross-account dev workflow.** Is there a smooth pattern for migrating a project temporarily to a different account when one account is compute-bound? (Move handoff doc + repo access?) — currently asynchronous and manual.
-- **Z Sales Platform alignment doc.** Currently uses only this profile + project knowledge. May graduate to a project-level `ALIGNMENT.md` if multi-user (Lucas) onboarding makes shared substrate decisions worth tracking publicly.
-- **Vercel-hosted handoff doc service shape.** Should the same Multi-Project MCP server also serve per-project handoff docs (so any new chat can `get_handoff_doc(project='zsales')` and pull live content)? Single tool with `project` param, or multiple project-specific tools? Authentication if/when handoff doc has sensitive content? Active arc for next Z Sales session.
+- **Z Sales Platform alignment doc.** Currently uses this profile + the Project Bible + project knowledge. May graduate to a project-level `ALIGNMENT.md` if multi-user (Lucas) onboarding makes shared substrate decisions worth tracking publicly.
+- **Vercel-hosted handoff/bible doc service shape.** Should the same Multi-Project MCP server also serve per-project handoff docs and Bibles (so any new chat can `get_handoff_doc(project='zsales')` / `get_bible(project='zsales')` and pull live content)? Single tool with `project` param, or multiple project-specific tools? Authentication if/when the content is sensitive? Active arc for next Z Sales session.
 - **Daily digest.** Should a single chat or automated process produce a once-a-day digest summarizing all 3 projects' state, what changed, what needs attention next? Format and trigger TBD.
 - **Command center pattern.** Whether to graduate to a dedicated "command center" chat that pulls fresh state from all 3 projects on demand and gives the meta-view. Currently using the per-project-chat-with-cross-awareness pattern (Option B); revisit if cross-project nudges prove insufficient in practice.
 - **Path B handoff agent architecture.** Target: phone-triggerable handoff flow where operator fires a Dispatch command, Mac Claude Code receives the trigger, places generated files into project repos, commits + pushes, and writes to an iCloud-synced folder so files appear on Mac filesystem without phone-to-Mac transfer. Two manual UI steps remain (Project Knowledge upload, Project Instructions paste). Architecture defined, build pending. Open sub-question: does Anthropic's Project Knowledge surface have any API for programmatic file uploads?
@@ -439,11 +449,11 @@ DEVICE
 - Ask device context at session start: Mac / phone alone / phone driving a remote base
 - Mac -> dev-ready options first, longer responses okay (but still terse in active build flow, v1.17, and lead concise per v1.25)
 - Phone alone -> tight, mobile-suited tasks
-- Phone + remote base -> Mac-required dev IS available via Dispatch/Remote Control; don't deprioritize dev
+- Phone + remote base -> Mac-required dev IS available via Dispatch/Code; don't deprioritize dev
 - Phone hard with: .md / .jsx / .html, render inline or push to GitHub
 - Phone needs all pasteable text (commands, prompts, PI blocks) inlined in chat as code blocks
-- Dispatch -> one host at a time, thin remote, one-shot tasks; Remote Control (claude remote-control) -> live dev session on the base, pick the base session in the Code tab (not a fresh phone session); trust git state from real commands, not the Code-tab summary
-- Desk repo path is ~/Desktop/capex-scout on BOTH Zmac and Zmac2 (NOT ~/Code/, v1.24); .env + RH token are out-of-band (don't sync via git); Desk DB = Neon (shared cloud, DB_BACKEND=neon) so NO DB AirDrop when flipping machines — both Macs read the same cloud DB, additive ALTER only, never drop (v1.27; SQLite is fallback only)
+- Dispatch -> one host at a time, thin remote, one-shot tasks; Remote Control -> live dev session
+- Desk repo path is ~/Desktop/capex-scout on BOTH Zmac and Zmac2 (NOT ~/Code/, v1.24); DB + .env/token are out-of-band (don't sync via git) — AirDrop the DB when flipping machines, never rm it
 
 CRITICAL THINKING MODE
 - One question at a time
@@ -461,13 +471,14 @@ DECISION OPTIONS
 
 NAMING
 - Handoff docs: <Project>_Handoff_<topic-slug>_<chat-code>.md (kebab-case topic-slug, 5-char chat-code)
+- Project Bible: <Project>_ProjectBible_<chat-code>.md
 - Chat-code: 5 chars, lowercase letters + digits, no 0/o/1/l/i
 - Profile version line: v<X.Y> with one-line change summary
 - Commit messages on profile/alignment: v<X.Y>: <change summary>
-- PROFILE.md and per-project handoff docs are SEPARATE artifacts; don't conflate
+- PROFILE.md, per-project Project Bibles, and per-project handoff docs are SEPARATE artifacts; don't conflate
 
 SESSION START
-- Fetch profile via get_profile MCP tool
+- Fetch profile via get_profile + read the project bible (then latest handoff)
 - Ask device context: Mac / phone alone / phone driving a remote base
 - Generate 5-char chat-code, include in title: "<Project> - <topic> [<code>]"
 - 2-3 line recap, 2-3 options
@@ -475,9 +486,10 @@ SESSION START
 
 HANDOFF (Section 5b)
 - Always outputs: handoff doc + Project Instructions block + new-chat kickoff prompt (all paste-ready)
+- Writes project-bible deltas (propose -> confirm -> write) when there are any
 - Handoff doc must comprehensively capture the ENTIRE chat (brain-dumps, decisions, tangents, parked ideas), not just code deltas
 - "Run handoff" ALSO runs the profile-update process (full PROFILE.md + push script) whenever there is a profile change — don't make the operator ask separately (v1.16)
-- Profile/alignment changes applied at handoff only, never mid-session; proposed before push
+- Profile/alignment/bible changes applied at handoff only, never mid-session; proposed before push/write
 
 COORDINATION
 - Workflow alignment yes; data/code coordination no
