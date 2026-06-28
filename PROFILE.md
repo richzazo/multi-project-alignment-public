@@ -2,7 +2,7 @@
 
 **Purpose.** Canonical reference for any Claude chat across any of Richard's projects: working style, communication preferences, device-aware behavior, the handoff protocol, and how project chats coordinate. Lives above all per-project docs; on workflow/style conflicts this doc wins, per-project docs win on their own substance.
 
-**Last updated:** June 23, 2026 (v1.32: §5b states explicitly there is NO handoff-doc/Bible artifact — the handoff distributes; per-project CANON doc-system definitions govern. v1.31: added the doc-relationship table to §5b; restored title-line surface-back. v1.30: structural strip + rewrote §5b as the doc-system handoff protocol.)
+**Last updated:** June 27, 2026 (v1.33: §5b — ALWAYS GENERATE THE ACTUAL DOC FILES for download then the push script, never paste-blocks-only; added the mid-handoff-update rule. v1.32: §5b states explicitly there is NO handoff-doc/Bible artifact — the handoff distributes; per-project CANON doc-system definitions govern. v1.31: added the doc-relationship table to §5b; restored title-line surface-back. v1.30: structural strip + rewrote §5b as the doc-system handoff protocol.)
 
 ---
 
@@ -164,6 +164,15 @@ Three mechanical moves + outputs, no extra prompting and no chat re-read (the le
 5. **PROJECT INSTRUCTIONS** — regenerate ONLY if structure/rules changed. PI is the stable bootstrap layer (identity, doc map, session-start ritual, hard rules, handoff trigger) and points to the state doc instead of embedding state, so it rarely changes. Otherwise say "PI unchanged."
 6. **PROFILE** — if a cross-project working-style preference changed, propose it; on confirm, produce the full updated PROFILE.md + push script.
 
+### Handoff output format — ALWAYS GENERATE THE FILES (hard rule)
+
+**ALWAYS GENERATE THE ACTUAL DOC FILES FOR DOWNLOAD, THEN GIVE THE PUSH SCRIPT. NEVER PASTE-BLOCKS-ONLY.**
+On every handoff/checkpoint that writes docs, the chat MUST: (1) write each changed doc as a real downloadable file (NOW, BOARD, CANON-additions, PROFILE when changed) and present them via the file UI, AND (2) emit ONE `[Terminal]` push script that places the files into the repo, archives the prior NOW snapshot, and commits+pushes. Inline paste-blocks of doc bodies are NOT acceptable as the deliverable — the operator downloads the files and the script moves them. This is non-negotiable and has been missed repeatedly; do not regress.
+
+### Mid-handoff updates
+
+If new information lands DURING a handoff (e.g. a build finishes while the state doc is being written), STOP and fold the new reality into the docs before producing them — never produce a state doc that is already stale. The handoff reflects the truth at generation time, not at the moment it started. A doc changed mid-handoff is regenerated in its final form (one file, current state), not patched after the fact.
+
 ### `cmd` (the push)
 
 On **"cmd"**: emit ONE `[Terminal]` script that moves the changed docs into the repo, archives the prior state doc to `<repo>/docs/history/<Project>_NOW_<code>.md`, and `git add/commit/push`es. No inline comments in the bash block. (`cmd` pushes whatever the handoff produced, including CANON/PROFILE once confirmed; `checkpoint` is the gated mid-session subset.)
@@ -178,7 +187,7 @@ Coarse, stale-resistant fields only (account / last-active / phase / Mac-require
 
 **The Desk** — personal · last active Jun 8 · mid-build (unified product locked; agent brain real/runnable, only EDGAR live-fed; RH ingestion proven; wiring the real-data layer into the cockpit) · Mac for CC dev at `~/Desktop/capex-scout` · mobile-friendly: product/UX design, prototype review, decision capture · no blockers.
 
-**Z Sales / ThroughlineAI** — personal · heavy-dev toward production · doc set: CANON / BOARD / NOW in `~/Code/z-sales-platform` (read NOW at session start) · Mac for CC dev on the Next.js/pnpm repo · mobile-friendly: doc review, schema/UX review, decision capture, prompt + email-voice drafting · no blockers.
+**Z Sales / ThroughlineAI** — personal · last active Jun 27 · heavy-dev toward production · doc set: CANON / BOARD / NOW in `~/Code/z-sales-platform` (read NOW at session start) · Mac for CC dev on the Next.js/pnpm repo · mobile-friendly: doc review, schema/UX review, decision capture, prompt + email-voice drafting · no blockers.
 
 **Lodestar** — personal · last active May 30 · early-build (spec + architecture + HTML prototype; deterministic-engine + canonical-model + AI-native layer scoped) · Mac for dev (stack TBD, no repo yet) · mobile-friendly: spec/data-model/prototype review · no blockers.
 
