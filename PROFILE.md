@@ -2,7 +2,7 @@
 
 **Purpose.** Canonical reference for any Claude chat across any of Richard's projects: working style, communication preferences, device-aware behavior, the handoff protocol, and how project chats coordinate. Lives above all per-project docs; on workflow/style conflicts this doc wins, per-project docs win on their own substance.
 
-**Last updated:** June 29, 2026 (v1.34: §1 tendencies — added the overnight-lane discipline (fire worktrees as autonomous single-shot parallel prompts, never hand-walk one tree seam-by-seam while others sit cold) + the stale-ticket guard (a "nothing to do / already merged" report is a stale-ticket alarm, reconcile against the operator's actual feedback before building). v1.33: §5b — ALWAYS GENERATE THE ACTUAL DOC FILES for download then the push script, never paste-blocks-only; added the mid-handoff-update rule. v1.32: §5b states explicitly there is NO handoff-doc/Bible artifact — the handoff distributes; per-project CANON doc-system definitions govern. v1.31: added the doc-relationship table to §5b; restored title-line surface-back.)
+**Last updated:** June 29, 2026 (v1.35: §1 tendencies — added the prioritization-layer discipline (when the operator dumps a backlog, do not scope item-by-item; PULL the board, fold the new items in, RANK the whole set, GROUP into footprint-checked batches, fire as parallel lanes — a ranked board with batches is the deliverable, not a per-item answer). v1.34: §1 tendencies — overnight-lane discipline (fire worktrees as autonomous single-shot parallel prompts, never hand-walk one tree seam-by-seam while others sit cold) + the stale-ticket guard. v1.33: §5b — ALWAYS GENERATE THE ACTUAL DOC FILES for download then the push script, never paste-blocks-only; added the mid-handoff-update rule. v1.32: §5b states explicitly there is NO handoff-doc/Bible artifact — the handoff distributes; per-project CANON doc-system definitions govern. v1.31: added the doc-relationship table to §5b; restored title-line surface-back.)
 
 ---
 
@@ -45,6 +45,7 @@ For any frontend/UI work, read the ACTUAL component (the real `.jsx`/`.html` sou
 - **KISS over ceremony.** When he says "keep it simple," strip to the one or two things asked for: no bonus artifacts, no what-to-do-next lists, no preamble.
 - **Overnight lanes run autonomously, in parallel — don't babysit one.** When the plan is N parallel worktrees, fire each as a single self-contained prompt (investigate → build → verify → report) and let them run unattended. Hand-walking one tree seam-by-seam while the others sit empty is the failure mode (it happened once and frustrated him badly). If a lane can only investigate because it depends on another's merge, say so explicitly and still fire it.
 - **A "nothing to do / already merged" report is a stale-ticket alarm, not a win.** Don't re-ship a merged fix or fabricate no-op commits. Stop, search past chats for the operator's ORIGINAL complaint, and confirm the ticket still describes real, unbuilt work before building. (Pairs with the read-side-path lesson: a backend ticket whose output never reached the UI looks done but isn't.)
+- **Prioritize FROM the board, never react item-by-item.** When he dumps a backlog of feedback/bugs/features mid-session, the job is NOT to scope each item as it arrives (that causes option-paralysis and leaves the roadmap un-ranked). The job is: PULL the current board, FOLD the new items in, RANK the whole set against his stated priorities + blocker/headline severity, GROUP into conflict-free batches, footprint-map before parallelizing, then FIRE the lanes. A ranked board with batches is the deliverable he wants, not a per-item answer. He will say so sharply if Claude is reacting instead of prioritizing — that is the tell to stop and pull the whole board.
 - Comfortable with multiple accounts and paid services when justified.
 
 ### Decision-options format
@@ -169,7 +170,7 @@ Three mechanical moves + outputs, no extra prompting and no chat re-read (the le
 ### Handoff output format — ALWAYS GENERATE THE FILES (hard rule)
 
 **ALWAYS GENERATE THE ACTUAL DOC FILES FOR DOWNLOAD, THEN GIVE THE PUSH SCRIPT. NEVER PASTE-BLOCKS-ONLY.**
-On every handoff/checkpoint that writes docs, the chat MUST: (1) write each changed doc as a real downloadable file (NOW, BOARD, CANON-additions, PROFILE when changed) and present them via the file UI, AND (2) emit ONE `[Terminal]` push script that places the files into the repo, archives the prior NOW snapshot, and commits+pushes. Inline paste-blocks of doc bodies are NOT acceptable as the deliverable — the operator downloads the files and the script moves them. This is non-negotiable and has been missed repeatedly; do not regress.
+On every handoff/checkpoint that writes docs, the chat MUST: (1) write each changed doc as a real downloadable file (NOW, BOARD, CANON, PROFILE when changed) and present them via the file UI, AND (2) emit ONE `[Terminal]` push script that places the files into the repo, archives the prior NOW snapshot, and commits+pushes. Inline paste-blocks of doc bodies are NOT acceptable as the deliverable — the operator downloads the files and the script moves them. This is non-negotiable and has been missed repeatedly; do not regress. **CANON specifically: generate the FULL integrated CANON with the additions folded into their real sections — never a separate "additions" stub file that punts the fold to the next chat.** (This was missed in m9k4t and caught: the additions stub is not an acceptable deliverable; fold into the whole doc.)
 
 ### Mid-handoff updates
 
@@ -189,7 +190,7 @@ Coarse, stale-resistant fields only (account / last-active / phase / Mac-require
 
 **The Desk** — personal · last active Jun 8 · mid-build (unified product locked; agent brain real/runnable, only EDGAR live-fed; RH ingestion proven; wiring the real-data layer into the cockpit) · Mac for CC dev at `~/Desktop/capex-scout` · mobile-friendly: product/UX design, prototype review, decision capture · no blockers.
 
-**Z Sales / ThroughlineAI** — personal · last active Jun 27 · heavy-dev toward production · doc set: CANON / BOARD / NOW in `~/Code/z-sales-platform` (read NOW at session start) · Mac for CC dev on the Next.js/pnpm repo · mobile-friendly: doc review, schema/UX review, decision capture, prompt + email-voice drafting · no blockers.
+**Z Sales / ThroughlineAI** — personal · last active Jun 29 · heavy-dev toward production · doc set: CANON / BOARD / NOW in `~/Code/z-sales-platform` (read NOW at session start) · Mac for CC dev on the Next.js/pnpm repo · mobile-friendly: doc review, schema/UX review, decision capture, prompt + email-voice drafting · no blockers.
 
 **Lodestar** — personal · last active May 30 · early-build (spec + architecture + HTML prototype; deterministic-engine + canonical-model + AI-native layer scoped) · Mac for dev (stack TBD, no repo yet) · mobile-friendly: spec/data-model/prototype review · no blockers.
 
