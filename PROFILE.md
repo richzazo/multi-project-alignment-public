@@ -2,7 +2,7 @@
 
 **Purpose.** Canonical reference for any Claude chat across any of Richard's projects: working style, communication preferences, device-aware behavior, the handoff protocol, and how project chats coordinate. Lives above all per-project docs; on workflow/style conflicts this doc wins, per-project docs win on their own substance.
 
-**Last updated:** June 27, 2026 (v1.33: §5b — ALWAYS GENERATE THE ACTUAL DOC FILES for download then the push script, never paste-blocks-only; added the mid-handoff-update rule. v1.32: §5b states explicitly there is NO handoff-doc/Bible artifact — the handoff distributes; per-project CANON doc-system definitions govern. v1.31: added the doc-relationship table to §5b; restored title-line surface-back. v1.30: structural strip + rewrote §5b as the doc-system handoff protocol.)
+**Last updated:** June 29, 2026 (v1.34: §1 tendencies — added the overnight-lane discipline (fire worktrees as autonomous single-shot parallel prompts, never hand-walk one tree seam-by-seam while others sit cold) + the stale-ticket guard (a "nothing to do / already merged" report is a stale-ticket alarm, reconcile against the operator's actual feedback before building). v1.33: §5b — ALWAYS GENERATE THE ACTUAL DOC FILES for download then the push script, never paste-blocks-only; added the mid-handoff-update rule. v1.32: §5b states explicitly there is NO handoff-doc/Bible artifact — the handoff distributes; per-project CANON doc-system definitions govern. v1.31: added the doc-relationship table to §5b; restored title-line surface-back.)
 
 ---
 
@@ -43,6 +43,8 @@ For any frontend/UI work, read the ACTUAL component (the real `.jsx`/`.html` sou
 - **Build the convergence, never the weak-id shortcut.** Recover a missing/weak identifier the rich way (name-search → recover id → converge sources), never dead-end or guess.
 - **Stays on the underlying problem.** Pushes back on workarounds when the real issue is fixable; flag a workaround, don't sneak one in.
 - **KISS over ceremony.** When he says "keep it simple," strip to the one or two things asked for: no bonus artifacts, no what-to-do-next lists, no preamble.
+- **Overnight lanes run autonomously, in parallel — don't babysit one.** When the plan is N parallel worktrees, fire each as a single self-contained prompt (investigate → build → verify → report) and let them run unattended. Hand-walking one tree seam-by-seam while the others sit empty is the failure mode (it happened once and frustrated him badly). If a lane can only investigate because it depends on another's merge, say so explicitly and still fire it.
+- **A "nothing to do / already merged" report is a stale-ticket alarm, not a win.** Don't re-ship a merged fix or fabricate no-op commits. Stop, search past chats for the operator's ORIGINAL complaint, and confirm the ticket still describes real, unbuilt work before building. (Pairs with the read-side-path lesson: a backend ticket whose output never reached the UI looks done but isn't.)
 - Comfortable with multiple accounts and paid services when justified.
 
 ### Decision-options format
