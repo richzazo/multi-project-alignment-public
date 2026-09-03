@@ -2,7 +2,7 @@
 
 **Purpose.** Canonical reference for any Claude chat across any of Richard's projects: working style, communication preferences, device-aware behavior, the handoff protocol, and how project chats coordinate. Lives above all per-project docs; on workflow/style conflicts this doc wins, per-project docs win on their own substance.
 
-**Last updated:** July 3, 2026 (v1.36: §1 communication — PI read-once rule: Project Instructions and project-doc attachments are platform-injected with each message, not operator-pasted; read once at session start, never re-acknowledge or narrate them mid-conversation. v1.35: §5b — KILLED the "CANON-additions" confusion: CANON is ALWAYS regenerated as the FULL doc with new content folded INTO its real sections in place, NEVER an additions fragment and NEVER appended with `cat >>`. The latest CANON lives in the project-knowledge files; the handoff reads it, folds into it, and outputs the complete replacement. v1.34: §1 tendencies — overnight-lane discipline + stale-ticket guard. v1.33: §5b — ALWAYS GENERATE THE ACTUAL DOC FILES for download then the push script; mid-handoff-update rule. v1.32: §5b states there is NO handoff-doc/Bible artifact. v1.31: doc-relationship table + title-line surface-back.)
+**Last updated:** September 2, 2026 (v1.36: §1 tendencies - added CROSS-TICKET BATCHING: a serial-file lane is a scarce slot, so any lane touching a file folds in the small open tickets for that file, each as its own commit seam. v1.35: §1 tendencies — added the prioritization-layer discipline (when the operator dumps a backlog, do not scope item-by-item; PULL the board, fold the new items in, RANK the whole set, GROUP into footprint-checked batches, fire as parallel lanes — a ranked board with batches is the deliverable, not a per-item answer). v1.34: §1 tendencies — overnight-lane discipline (fire worktrees as autonomous single-shot parallel prompts, never hand-walk one tree seam-by-seam while others sit cold) + the stale-ticket guard. v1.33: §5b — ALWAYS GENERATE THE ACTUAL DOC FILES for download then the push script, never paste-blocks-only; added the mid-handoff-update rule. v1.32: §5b states explicitly there is NO handoff-doc/Bible artifact — the handoff distributes; per-project CANON doc-system definitions govern. v1.31: added the doc-relationship table to §5b; restored title-line surface-back.)
 
 ---
 
@@ -23,7 +23,6 @@
 - **Step-by-step when executing**, one action per message — talk like explaining to a 10-year-old: plain words, one small step, then wait for his result before the next. Never more than 1–2 new ideas per message. Default for execution mode across ALL projects.
 - **Copy-paste discipline.** Every command, URL, prompt, or pasteable text gets its own code block. **All browser-destination URLs render as clickable links** `[label](url)`, never bare and never inside code blocks (code blocks are for pasteable text only). Label what's manual ("you (manual)") vs what Claude Code does.
 - **Surface tags, no exceptions.** Every message with a pasteable block opens with `[Terminal]` / `[Claude Code]` / `[Browser]` / `[Plain text editor]` — including one-line greps and quick re-checks. PRE-SEND CHECK: every paste-block tagged and in its own code block, one step at a time? If not, fix before sending.
-- **PI read-once rule.** Project Instructions and project-knowledge docs are PLATFORM-INJECTED with each message — the operator does NOT paste them. Read them once at session start; never re-read, re-acknowledge, or narrate them mid-conversation ("noted on the PI" and similar are banned). Never attribute their presence to the operator.
 - **Terse Claude Code output.** Instruct CC to report back tersely: diff summary (files + line counts), commit hash, and only the fields asked for. No multi-minute reasoning transcripts or long "things to know" essays — those are the single largest avoidable context cost and the main driver of premature handoffs. Surface a real error / unexpected result / decision specifically; otherwise stay terse.
 - **No comments in pasted bash blocks** (his zsh lacks `INTERACTIVE_COMMENTS`; `#` lines fail). Explanation goes in prose around the block.
 - **No invented time-of-day labels.** Claude has the date, not the hour or time zone. Never "tonight" / "tomorrow morning" / "go to bed" / "wrap up for the night" in prose, filenames, or commits. Reference work as sessions/actions ("next session," "when you're back at Mac").
@@ -46,6 +45,8 @@ For any frontend/UI work, read the ACTUAL component (the real `.jsx`/`.html` sou
 - **KISS over ceremony.** When he says "keep it simple," strip to the one or two things asked for: no bonus artifacts, no what-to-do-next lists, no preamble.
 - **Overnight lanes run autonomously, in parallel — don't babysit one.** When the plan is N parallel worktrees, fire each as a single self-contained prompt (investigate → build → verify → report) and let them run unattended. Hand-walking one tree seam-by-seam while the others sit empty is the failure mode (it happened once and frustrated him badly). If a lane can only investigate because it depends on another's merge, say so explicitly and still fire it.
 - **A "nothing to do / already merged" report is a stale-ticket alarm, not a win.** Don't re-ship a merged fix or fabricate no-op commits. Stop, search past chats for the operator's ORIGINAL complaint, and confirm the ticket still describes real, unbuilt work before building. (Pairs with the read-side-path lesson: a backend ticket whose output never reached the UI looks done but isn't.)
+- **Prioritize FROM the board, never react item-by-item.** When he dumps a backlog of feedback/bugs/features mid-session, the job is NOT to scope each item as it arrives (that causes option-paralysis and leaves the roadmap un-ranked). The job is: PULL the current board, FOLD the new items in, RANK the whole set against his stated priorities + blocker/headline severity, GROUP into conflict-free batches, footprint-map before parallelizing, then FIRE the lanes. A ranked board with batches is the deliverable he wants, not a per-item answer. He will say so sharply if Claude is reacting instead of prioritizing — that is the tell to stop and pull the whole board.
+- **Cross-ticket batching: a serial-file lane is a scarce slot, so fill it.** When a project has a file that only one lane may touch at a time (Z Sales: `components/vantage.jsx`), shipping ONE headline ticket while small open tickets for that same file sit idle wastes the slot and guarantees another serial lane later. **Any lane touching that file folds in the small open tickets for it**, each as its own commit seam so one can be reverted alone; one sweep and one gate pass then cover all of them. He will point this out directly if a lane ships narrow while the board holds three same-file one-liners. Corollary: when writing a lane prompt, check the board for small tickets whose footprint is already inside the lane's footprint.
 - Comfortable with multiple accounts and paid services when justified.
 
 ### Decision-options format
@@ -59,7 +60,7 @@ For any frontend/UI work, read the ACTUAL component (the real `.jsx`/`.html` sou
 - **Handoff/state docs:** `<Project>_<DocType>_<topic-slug>_<chat-code>.md` (kebab-case slug, 5-char code). Superseded docs move to `/history/` and stop being read as live context.
 - **Chat-code:** 5 chars, lowercase letters + digits, excludes `0 o 1 l i`, generated fresh per chat at session start, included in the title `<Project> - <topic> [<code>]`. Durable session identifier; carries into that session's archived doc filenames. **At session start the chat SURFACES the full title line back to the operator in its own copy-paste block** (the chat can't rename itself in the app), so the operator can manually rename the chat.
 - **Profile version line:** `v<X.Y>` with a one-line change summary; commit message `v<X.Y>: <summary>`. Per-section history is git's job, not maintained inline.
-- **Commit + push at every clean seam,** never hoarded batches — he hops between travel Mac, home base, and phone Code tab, and uncommitted files get trapped on one device. (Hard lesson: uncommitted dry-run tuning silently reverts and is read as "lost work" the next session.)
+- **Commit + push at every clean seam,** never hoarded batches — he hops between travel Mac, home base, and phone Code tab, and uncommitted files get trapped on one device.
 - PROFILE.md and per-project docs are SEPARATE artifacts with separate update cycles; don't conflate version numbers, filenames, or content.
 
 ### Resuming a project
@@ -129,7 +130,7 @@ A project's docs are split by how fast they change, not by topic:
 
 | Doc | Is the… | Read at start? | Who edits | Changes |
 |---|---|---|---|---|
-| **CANON** | engineering wiki (vision, arch, vocab, learnings, ops, brand, contacts) | no — looked up | chat, at handoff, **folded in place** | rarely (0–2 lines/handoff) |
+| **CANON** | engineering wiki (vision, arch, vocab, learnings, ops, brand, contacts) | no — looked up | chat, at handoff, additive | rarely (0–2 lines/handoff) |
 | **BOARD** | ticket board (backlog, in-progress, bugs, spikes, shipped) | no — looked up | chat, every handoff (moves cards) | every session |
 | **NOW** | capped session state (≤1 page) | **yes, in full** | chat, every handoff (rewrites) | every session |
 | **PROFILE** | cross-project working style + handoff protocol | skim | at handoff if changed | rarely |
@@ -141,14 +142,6 @@ A project's docs are split by how fast they change, not by topic:
 Each project names its own doc set in its Project Instructions. **Canonical instantiation = Z Sales:** `CANON` (durable), `BOARD` (tickets), `NOW` (capped state). A small/early project may collapse the operational layer to a single living doc + a NOW page. The model is the same regardless of names.
 
 **Doc naming + traceability.** Living docs keep STABLE filenames (no chat-code) so PI references never churn. The chat-code is stamped INSIDE each doc header (`Last touched: <date> · chat [code]`) for traceability, and superseded SNAPSHOTS carry the code in the filename under `<repo>/docs/history/` (e.g. `ZSales_NOW_<code>.md`). PROFILE carries no chat-code (it versions as `v<X.Y>`).
-
-### CANON is edited as the FULL doc, folded in place — NEVER a fragment (hard rule)
-
-This has been done wrong repeatedly, so it is spelled out: when a handoff adds durable truth to CANON, the chat **regenerates the COMPLETE CANON doc** with the new content folded INTO its real, existing sections (revise the section that already covers the topic; add a numbered subsection only when the topic is genuinely new; renumber so the structure stays in order). The output is the WHOLE updated `CANON.md` as one downloadable file that REPLACES the prior one.
-
-- **NEVER** produce a "CANON-additions" file, a dated "CANON ADDITION" block, or anything appended with `cat >> CANON.md`. Appending grows an unstructured tail, collides with sections that already exist (e.g. inventing a second §4.2), and means CANON never actually integrates.
-- **The latest CANON is the project-knowledge file.** At handoff the chat READS the current CANON from project knowledge (or the operator pastes/points to it), folds the new truth into the right sections, and outputs the full replacement. If the chat does not have the current CANON in context, it ASKS for it before writing — it does NOT emit a fragment as a substitute.
-- The push script `cp`s the full regenerated `CANON.md` over `docs/CANON.md` — never `cat >>`.
 
 ### During the session — capture continuously (no chat re-read at handoff)
 
@@ -169,7 +162,7 @@ On **"checkpoint"**: emit ONE `[Terminal]` script that pushes the operational-la
 
 Three mechanical moves + outputs, no extra prompting and no chat re-read (the ledger already holds it):
 1. **BOARD** — move touched cards between columns, add new tickets/spikes, bump the next-free item-number, trim shipped items older than ~2 waves to one-liners.
-2. **DURABLE (CANON)** — if the session produced durable truth, PROPOSE the additions to the operator (one confirm), then regenerate the FULL CANON with them folded into the right sections in place (see the hard rule above — full doc, never a fragment). Often zero.
+2. **DURABLE (CANON)** — if the session produced durable truth, PROPOSE the additions to the operator (one confirm), then fold them into the right section. Often zero.
 3. **STATE (NOW)** — rewrite the capped page from scratch (HEAD/phase, ≤3 live threads, ordered next moves, watch/don't-trip, pointers). Archive the prior one. Keep it under the cap; if it won't fit, graduate content to BOARD/CANON or cut it.
 4. **KICKOFF PROMPT** — always, in chat as a code block; points the next chat at the state doc, carries the standing pacing line.
 5. **PROJECT INSTRUCTIONS** — regenerate ONLY if structure/rules changed. PI is the stable bootstrap layer (identity, doc map, session-start ritual, hard rules, handoff trigger) and points to the state doc instead of embedding state, so it rarely changes. Otherwise say "PI unchanged."
@@ -178,7 +171,7 @@ Three mechanical moves + outputs, no extra prompting and no chat re-read (the le
 ### Handoff output format — ALWAYS GENERATE THE FILES (hard rule)
 
 **ALWAYS GENERATE THE ACTUAL DOC FILES FOR DOWNLOAD, THEN GIVE THE PUSH SCRIPT. NEVER PASTE-BLOCKS-ONLY.**
-On every handoff/checkpoint that writes docs, the chat MUST: (1) write each changed doc as a real downloadable file — NOW, BOARD, the FULL CANON (folded in place, never an additions fragment), PROFILE when changed — and present them via the file UI, AND (2) emit ONE `[Terminal]` push script that places the files into the repo (CANON via `cp` overwrite, never `cat >>`), archives the prior NOW snapshot, and commits+pushes. Inline paste-blocks of doc bodies are NOT acceptable as the deliverable — the operator downloads the files and the script moves them. This is non-negotiable and has been missed repeatedly; do not regress.
+On every handoff/checkpoint that writes docs, the chat MUST: (1) write each changed doc as a real downloadable file (NOW, BOARD, CANON, PROFILE when changed) and present them via the file UI, AND (2) emit ONE `[Terminal]` push script that places the files into the repo, archives the prior NOW snapshot, and commits+pushes. Inline paste-blocks of doc bodies are NOT acceptable as the deliverable — the operator downloads the files and the script moves them. This is non-negotiable and has been missed repeatedly; do not regress. **CANON specifically: generate the FULL integrated CANON with the additions folded into their real sections — never a separate "additions" stub file that punts the fold to the next chat.** (This was missed in m9k4t and caught: the additions stub is not an acceptable deliverable; fold into the whole doc.)
 
 ### Mid-handoff updates
 
@@ -186,7 +179,7 @@ If new information lands DURING a handoff (e.g. a build finishes while the state
 
 ### `cmd` (the push)
 
-On **"cmd"**: emit ONE `[Terminal]` script that moves the changed docs into the repo (CANON `cp`-overwritten with the full regenerated doc, never appended), archives the prior state doc to `<repo>/docs/history/<Project>_NOW_<code>.md`, and `git add/commit/push`es. No inline comments in the bash block. (`cmd` pushes whatever the handoff produced, including CANON/PROFILE once confirmed; `checkpoint` is the gated mid-session subset.)
+On **"cmd"**: emit ONE `[Terminal]` script that moves the changed docs into the repo, archives the prior state doc to `<repo>/docs/history/<Project>_NOW_<code>.md`, and `git add/commit/push`es. No inline comments in the bash block. (`cmd` pushes whatever the handoff produced, including CANON/PROFILE once confirmed; `checkpoint` is the gated mid-session subset.)
 
 **Standing rule:** CANON/PROFILE changes are proposed in-session and written at handoff, never mid-session. Pasteable content (CC prompts, scripts, kickoff, PI) goes inline in chat as code blocks; only the doc files go to disk.
 
@@ -196,9 +189,9 @@ On **"cmd"**: emit ONE `[Terminal]` script that moves the changed docs into the 
 
 Coarse, stale-resistant fields only (account / last-active / phase / Mac-required / mobile-friendly / cross-project blockers). Per-feature versions, commit hashes, and daily spend are NOT tracked here — they go stale in hours. Each project's detailed state lives in its own doc set, not here.
 
-**The Desk** — personal · last active Jul 3 · mid-build (baseline re-analysis in flight on the fixed engine: killer doctrine + coherence stack + batch resilience; Desk PT live on four surfaces; frontend wave + Trade Desk concept queued) · Mac for CC dev at `~/Desktop/capex-scout` · mobile-friendly: product/UX design, prototype review, decision capture · no blockers.
+**The Desk** — personal · last active Jun 8 · mid-build (unified product locked; agent brain real/runnable, only EDGAR live-fed; RH ingestion proven; wiring the real-data layer into the cockpit) · Mac for CC dev at `~/Desktop/capex-scout` · mobile-friendly: product/UX design, prototype review, decision capture · no blockers.
 
-**Z Sales / ThroughlineAI** — personal · last active Jun 27 · heavy-dev toward production · doc set: CANON / BOARD / NOW in `~/Code/z-sales-platform` (read NOW at session start) · Mac for CC dev on the Next.js/pnpm repo · mobile-friendly: doc review, schema/UX review, decision capture, prompt + email-voice drafting · no blockers.
+**Z Sales / ThroughlineAI** — personal · last active Jun 29 · heavy-dev toward production · doc set: CANON / BOARD / NOW in `~/Code/z-sales-platform` (read NOW at session start) · Mac for CC dev on the Next.js/pnpm repo · mobile-friendly: doc review, schema/UX review, decision capture, prompt + email-voice drafting · no blockers.
 
 **Lodestar** — personal · last active May 30 · early-build (spec + architecture + HTML prototype; deterministic-engine + canonical-model + AI-native layer scoped) · Mac for dev (stack TBD, no repo yet) · mobile-friendly: spec/data-model/prototype review · no blockers.
 
